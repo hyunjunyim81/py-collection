@@ -12,6 +12,7 @@ astunparse==1.6.3
 async-lru==2.0.4
 attrs==23.2.0
 Babel==2.14.0
+backcall==0.2.0
 beautifulsoup4==4.12.3
 bleach==6.1.0
 boltons @ file:///C:/ci_311/boltons_1677729932371/work
@@ -34,6 +35,7 @@ debugpy==1.8.1
 decorator==5.1.1
 defusedxml==0.7.1
 distro @ file:///C:/b/abs_a3uni_yez3/croot/distro_1701455052240/work
+docopt==0.6.2
 executing==2.0.1
 fastapi==0.110.0
 fastjsonschema==2.19.1
@@ -61,7 +63,7 @@ imageio==2.34.0
 importlib_resources==6.3.1
 iniconfig @ file:///home/linux1/recipes/ci/iniconfig_1610983019677/work
 ipykernel==6.29.4
-ipython==8.22.2
+ipython==8.12.3
 ipywidgets==8.1.2
 isoduration==20.11.0
 jedi==0.19.1
@@ -121,7 +123,9 @@ packaging @ file:///C:/b/abs_28t5mcoltc/croot/packaging_1693575224052/work
 pandas==2.2.1
 pandocfilters==1.5.1
 parso==0.8.3
+pickleshare==0.7.5
 pillow @ file:///C:/b/abs_e22m71t0cb/croot/pillow_1707233126420/work
+pipreqs==0.5.0
 platformdirs @ file:///C:/b/abs_b6z_yqw_ii/croot/platformdirs_1692205479426/work
 pluggy @ file:///C:/ci_311/pluggy_1676422178143/work
 polars==1.4.1
@@ -205,4 +209,5 @@ Werkzeug==3.0.1
 widgetsnbextension==4.0.10
 win-inet-pton @ file:///C:/ci_311/win_inet_pton_1676425458225/work
 wrapt==1.16.0
+yarg==0.1.9
 zstandard==0.19.0
