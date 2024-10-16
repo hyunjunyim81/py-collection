@@ -1,4 +1,4 @@
-import src.crawling.web_proc as wp
+import src.web_proc as wp
 
 
 def main():
