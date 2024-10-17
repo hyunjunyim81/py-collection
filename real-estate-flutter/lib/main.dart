@@ -1,8 +1,26 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'api/naver_api.dart';
+import 'dart:io';
 
-void main() {
+import 'package:flutter/material.dart';
+import 'package:real_estate/model/estate_model.dart';
+import 'package:window_manager/window_manager.dart';
+import 'api/net_api.dart';
+import 'common/di/extension_get_it.dart';
+
+void getItRegister() {
+  di.scopeClear();
+  //singleton
+  di.registerSingleton<EstateModel>(EstateModel());
+
+}
+
+void main() async {
+  if (Platform.isWindows || Platform.isLinux) {
+    WidgetsFlutterBinding.ensureInitialized();
+    await windowManager.ensureInitialized();
+    WindowManager.instance.setMinimumSize(const Size(640, 480));
+    WindowManager.instance.setSize(const Size(640, 480));
+  }
+
   runApp(const MyApp());
 }
 
@@ -59,8 +77,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  void _request() async {
+    var filter = await NetAPI.searchResult('강남구', '개포동');
+    var cluster = await NetAPI.cluster(filter);
+    await NetAPI.article(cluster.data?.article?? []);
+  }
+
   void _incrementCounter() {
-    NaverAPI().searchResult('강남구', '개포동');
+    _request();
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below

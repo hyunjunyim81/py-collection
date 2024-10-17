@@ -72,9 +72,10 @@ class WebProc:
             for url in article.urls:
                 response = requests.get(url,  headers=UA.defaultHeaders)
                 json_str = json.loads(json.dumps(response.json()))
+                print(F'{url} : {json_str} ')
                 for jsonObject in json_str['body']:
                     self.articleInfoList.append(Model.ArticleBody.from_dict(jsonObject))
-                #print(F'{url} : {json_str} ')
+                
                 
         print(F'articleList complete')
                 
