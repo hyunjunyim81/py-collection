@@ -77,13 +77,14 @@ class ARTICLE {
 
   void generateUrl(Filter filter) {
     len_pages = ((count ?? 0) / 20 + 1).ceil();
-    print('generateUrl len_pages : $len_pages');
+    //print('generateUrl len_pages : $len_pages');
     urls.clear();
     for (var idx = 1; idx <= len_pages; ++idx) {
       urls.add('https://m.land.naver.com/cluster/ajax/articleList?itemId=${lgeo}'
           '&mapKey=&lgeo=${lgeo}&showR0=&rletTpCd=${filter.rletTpCds}'
-          '&tradTpCd=${filter.tradTpCds}&z=${z}&lat=${lat}&lon=${lon}'
-          '&totCnt=${count}&cortarNo=${filter.cortarNo}&page=${idx}');
+          '&tradTpCd=${filter.tradTpCds}&z=${z ?? 0}&lat=${lat}&lon=${lon}'
+          '&totCnt=${count}&page=${idx}');
+      //print('generateUrl url : ${urls.last}');
     }
   }
 

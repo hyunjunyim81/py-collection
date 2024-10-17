@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:real_estate/api/table/search_option.dart';
 import 'package:real_estate/model/estate_model.dart';
 import 'package:window_manager/window_manager.dart';
 import 'api/net_api.dart';
@@ -10,7 +11,6 @@ void getItRegister() {
   di.scopeClear();
   //singleton
   di.registerSingleton<EstateModel>(EstateModel());
-
 }
 
 void main() async {
@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _request() async {
-    var filter = await NetAPI.searchResult('강남구', '개포동');
+    var filter = await NetAPI.searchResult(SearchOption.basic());
     var cluster = await NetAPI.cluster(filter);
     await NetAPI.article(cluster.data?.article?? []);
   }
