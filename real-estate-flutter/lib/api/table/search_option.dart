@@ -40,10 +40,11 @@ class SearchOption {
     return ret.isEmpty ? TradeType.A1.key : ret;
   }
 
-  SearchOption.basic() {
-    gu = '강남구';
-    dong = '개포동';
-    rletTpCdList = [RoleType.SG];
-    tradTpCdList = [TradeType.A1, TradeType.B2];
+  SearchOption.basic({String selectedGu = '강남구',
+    String selectedDong = '개포동'}) {
+    gu = selectedGu;
+    dong = selectedDong;
+    rletTpCdList = [RoleType.SG, RoleType.SMS];
+    tradTpCdList = [TradeType.A1, TradeType.B2, TradeType.B3];
   }
 }

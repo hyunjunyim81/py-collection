@@ -22,8 +22,8 @@ class Filter {
     lat = double.parse(value.split("lat:")[1].split(",")[0]);
     lon = double.parse(value.split("lon:")[1].split(",")[0]);
     z = double.parse(value.split("z:")[1].split(",")[0]);
-    cortarNo = value.split("cortarNo:")[1].split(",")[0];
-    cortarNm = value.split("cortarNm:")[1].split(",")[0];
+    cortarNo = value.split("cortarNo:")[1].split(",")[0].trim();
+    cortarNm = value.split("cortarNm:")[1].split(",")[0].trim();
     //print('Filter outerHtml : $outerHtml');
     //rletTpCds = 'SG%3ASMS';
     //tradTpCds = 'A1%3AB1%3AB2';

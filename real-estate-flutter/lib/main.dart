@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:real_estate/api/table/search_option.dart';
+import 'package:real_estate/app/view/screen_view.dart';
 import 'package:real_estate/model/estate_model.dart';
 import 'package:window_manager/window_manager.dart';
 import 'api/net_api.dart';
@@ -20,9 +21,11 @@ void main() async {
     WindowManager.instance.setMinimumSize(const Size(640, 480));
     WindowManager.instance.setSize(const Size(640, 480));
   }
-
-  runApp(const MyApp());
+  getItRegister();
+  runApp(const ScreenView());
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

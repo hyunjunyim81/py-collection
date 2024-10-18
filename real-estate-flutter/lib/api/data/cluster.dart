@@ -53,6 +53,14 @@ class Data {
     }
     return data;
   }
+
+  int totalCount() {
+    int tc = 0;
+    for (ARTICLE a in article ?? []) {
+      tc += a.count ?? 0;
+    }
+    return tc;
+  }
 }
 
 class ARTICLE {
@@ -76,8 +84,8 @@ class ARTICLE {
         this.tourExist});
 
   void generateUrl(Filter filter) {
-    len_pages = ((count ?? 0) / 20 + 1).ceil();
-    //print('generateUrl len_pages : $len_pages');
+    len_pages = ((count ?? 0) / 20).ceil();
+    print('generateUrl ${filter.cortarNo}/$lgeo count : $count, page : $len_pages');
     urls.clear();
     for (var idx = 1; idx <= len_pages; ++idx) {
       urls.add('https://m.land.naver.com/cluster/ajax/articleList?itemId=${lgeo}'
