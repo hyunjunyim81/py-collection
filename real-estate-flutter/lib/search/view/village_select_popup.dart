@@ -100,7 +100,7 @@ class _VillageSelectViewState extends State<_VillageSelectView> {
   Widget _itemForGu(Village village) {
     return TextButton(
         style: ButtonStyle(
-          shape: WidgetStateProperty.all(
+          shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
                 side: const BorderSide(
@@ -138,7 +138,7 @@ class _VillageSelectViewState extends State<_VillageSelectView> {
   Widget _itemForDong(String dong) {
     return TextButton(
         style: ButtonStyle(
-          shape: WidgetStateProperty.all(
+          shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
                 side: const BorderSide(
@@ -189,7 +189,7 @@ class _VillageSelectViewState extends State<_VillageSelectView> {
   Widget _closeButton() {
     return TextButton(
         style: ButtonStyle(
-          shape: WidgetStateProperty.all(
+          shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
                 side: const BorderSide(

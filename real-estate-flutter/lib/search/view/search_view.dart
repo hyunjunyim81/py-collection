@@ -7,6 +7,8 @@ import 'package:real_estate/common/view/page_state.dart';
 import 'package:real_estate/model/estate_model.dart';
 import 'package:real_estate/search/view/village_view.dart';
 
+import 'info_list_view.dart';
+
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
 
@@ -19,16 +21,14 @@ class _SearchViewState extends PageState<SearchView> {
 
   @override
   Widget body(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
-        const SizedBox(
+        SizedBox(
           height: 50,
           child: VillageView(),
         ),
         Expanded(
-            child: Container(
-                color: Colors.black12
-            ),
+            child: InfoListView(),
         ),
       ],
     );

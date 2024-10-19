@@ -39,7 +39,7 @@ class _VillageViewState extends State<VillageView> {
           width: 100,
           child: TextButton(
             style: const ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll<Color>(
+              backgroundColor: MaterialStatePropertyAll<Color>(
                   Colors.blueAccent),
             ),
             onPressed: () {
@@ -56,7 +56,7 @@ class _VillageViewState extends State<VillageView> {
           width: 100,
           child: TextButton(
             style: const ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll<Color>(
+              backgroundColor: MaterialStatePropertyAll<Color>(
                   Colors.blueAccent),
             ),
             onPressed: () {
@@ -76,7 +76,7 @@ class _VillageViewState extends State<VillageView> {
             alignment: Alignment.centerRight,
             child: TextButton(
               style: ButtonStyle (
-                backgroundColor: WidgetStatePropertyAll<Color>(
+                backgroundColor: MaterialStatePropertyAll<Color>(
                     estateModel.selectedDong.isNotEmpty ? Colors.green : Colors.grey),
               ),
               onPressed: () {
@@ -126,11 +126,12 @@ class _VillageViewState extends State<VillageView> {
       print('_search() filter : ${estateModel.filter!.lat} / ${estateModel.filter!.lon}');
       estateModel.cluster = await NetAPI.cluster(estateModel.filter!);
       print('_search() cluster : ${estateModel.cluster!.data?.totalCount()}');
-      // var bodyList = await NetAPI.article(estateModel.cluster?.data?.article ?? []);
-      // if (bodyList.isNotEmpty) {
-      //   estateModel.bodyList.addAll(bodyList);
-      // }
-      // print('_search() article : ${estateModel.bodyList.length}');
+      var bodyList = await NetAPI.article(estateModel.cluster?.data?.article ?? []);
+      if (bodyList.isNotEmpty) {
+        estateModel.bodyList.clear();
+        estateModel.bodyList.addAll(bodyList);
+      }
+      print('_search() article : ${estateModel.bodyList.length}');
     }
     catch (e) {
       print('_search() error : $e');
