@@ -8,27 +8,34 @@ class InfoItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 102,
-      child: Column(
-        children: [
-          Container(height: 1,
-            color: Colors.grey,
-            margin: EdgeInsets.only(bottom: 10),
-          ),
-          SizedBox(height: 20, child: _firstColumn(),),
-          SizedBox(height: 20, child: _secondColumn(),),
-          SizedBox(height: 20, child: _thirdColumn(),),
-          SizedBox(height: 20, child: _fourthColumn(),),
-          //SizedBox(height: 20,),
-          //SizedBox(height: 20,),
-          Container(height: 1,
-            color: Colors.grey,
-            margin: EdgeInsets.only(top: 10),
-          ),
-        ],
-      ),
-    );
+    return
+      GestureDetector(
+          onTap: () {
+            print("SizedBox clicked");
+          },
+          child: Container(
+            color: Colors.white,
+            height: 102,
+            child: Column(
+              children: [
+                Container(height: 1,
+                  color: Colors.grey,
+                  margin: const EdgeInsets.only(bottom: 10),
+                ),
+                SizedBox(height: 20, child: _firstColumn(),),
+                SizedBox(height: 20, child: _secondColumn(),),
+                SizedBox(height: 20, child: _thirdColumn(),),
+                SizedBox(height: 20, child: _fourthColumn(),),
+                //SizedBox(height: 20,),
+                //SizedBox(height: 20,),
+                Container(height: 1,
+                  color: Colors.grey,
+                  margin: const EdgeInsets.only(top: 10),
+                ),
+              ],
+            ),
+          )
+      );
   }
 
   Widget _firstColumn() {
@@ -51,8 +58,8 @@ class InfoItemView extends StatelessWidget {
         ),
         Container(
           padding: const EdgeInsets.only(left: 5, right: 5),
-          margin: const EdgeInsets.only(top: 2),
-          child: Text('${thing.rletTpNm} ${thing.flrInfo}층',
+          margin: const EdgeInsets.only(bottom: 2),
+          child: Text('${thing.flrInfo}층',
               style: const TextStyle(fontSize: 14, color: Colors.black)),
         ),
       ],
@@ -67,7 +74,7 @@ class InfoItemView extends StatelessWidget {
           padding: const EdgeInsets.only(left: 5, right: 5),
           child: Text(thing.atclFetrDesc,
               style: const TextStyle(fontSize: 14,
-                  color: Colors.black38)),
+                  color: Colors.black87)),
         ),
       ],
     );
@@ -94,7 +101,14 @@ class InfoItemView extends StatelessWidget {
         const SizedBox(width: 20),
         Container(
           padding: const EdgeInsets.only(left: 5, right: 5),
-          child: Text('${thing.cpNm} | ${thing.rltrNm}',
+          child: Text(thing.atclCfmYmd,
+              style: const TextStyle(fontSize: 14,
+                  color: Colors.redAccent)),
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: Text(thing.cpNm.isNotEmpty
+              ? '${thing.cpNm} | ${thing.rltrNm}' : thing.rltrNm,
               style: const TextStyle(fontSize: 14,
                   color: Colors.black)),
         ),
