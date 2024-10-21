@@ -1,9 +1,12 @@
-import 'office.dart';
-import 'down_town.dart';
+import 'package:real_estate/api/data/article_response.dart';
 
-class SalesTypeOffice
+import 'office.dart';
+import 'sales_type.dart';
+
+class SalesTypeOffice extends SalesType<Office>
 {
-  List<Office> salesBuy = [];
-  List<Office> monthlyRent = [];
-  List<Office> shortTernRent = [];
+  @override
+  Office create(Body body) {
+    return Office.config(body);
+  }
 }

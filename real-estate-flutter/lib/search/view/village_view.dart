@@ -9,7 +9,10 @@ import 'package:real_estate/api/table/village.dart';
 import 'package:real_estate/common/di/extension_get_it.dart';
 import 'package:real_estate/common/view/dialog_form.dart';
 import 'package:real_estate/model/estate_model.dart';
+import 'package:real_estate/model/filter_model.dart';
 import 'package:real_estate/search/view/village_select_popup.dart';
+
+import 'search_view.dart';
 
 class VillageView extends StatefulWidget {
   const VillageView({super.key});
@@ -21,6 +24,7 @@ class VillageView extends StatefulWidget {
 
 class _VillageViewState extends State<VillageView> {
   late final EstateModel estateModel = di.inject();
+  late final FilterModel filterModel = di.inject();
 
   @override
   void initState() {
@@ -63,31 +67,35 @@ class _VillageViewState extends State<VillageView> {
               _showSelectPopup(estateModel.findVillage(estateModel.selectedGu));
             },
             child: Text(
-                estateModel.selectedDong.isEmpty ? '선택' : estateModel.selectedDong,
+                estateModel.selectedDong.isEmpty ? '선택' : estateModel
+                    .selectedDong,
                 style: const TextStyle(fontSize: 18, color: Colors.white)
             ),
           ),
         ),
         Expanded(
-         //alignment: Alignment.centerRight,
+          //alignment: Alignment.centerRight,
           child: Container(
-            width: 100,
             padding: const EdgeInsets.only(right: 20),
             alignment: Alignment.centerRight,
-            child: TextButton(
-              style: ButtonStyle (
-                backgroundColor: MaterialStatePropertyAll<Color>(
-                    estateModel.selectedDong.isNotEmpty ? Colors.green : Colors.grey),
-              ),
-              onPressed: () {
-                if (estateModel.selectedDong.isNotEmpty) {
-                _search();
-                }
-              },
-              child: const Text(
-                  ' 검색 ',
-                  style: TextStyle(fontSize: 18, color: Colors.white)
-              ),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        if (estateModel.selectedDong.isNotEmpty) {
+                          _search();
+                        }
+                      },
+                      icon: const Icon(Icons.search)
+                  ),
+                  IconButton(
+                      onPressed: () {
+
+                      },
+                      icon: const Icon(Icons.settings)
+                  )
+                ]
             ),
           ),
         )
@@ -119,22 +127,11 @@ class _VillageViewState extends State<VillageView> {
   void _search() async {
     var progress = DialogForm().showProgress(context);
     try {
-      estateModel.filter = await NetAPI.searchResult(SearchOption.basic(
-        selectedGu: estateModel.selectedGu,
-        selectedDong: estateModel.selectedDong,
-      ));
-      print('_search() filter : ${estateModel.filter!.lat} / ${estateModel.filter!.lon}');
-      estateModel.cluster = await NetAPI.cluster(estateModel.filter!);
-      print('_search() cluster : ${estateModel.cluster!.data?.totalCount()}');
-      var bodyList = await NetAPI.article(estateModel.cluster?.data?.article ?? []);
-      if (bodyList.isNotEmpty) {
-        estateModel.bodyList.clear();
-        estateModel.bodyList.addAll(bodyList);
-      }
-      print('_search() article : ${estateModel.bodyList.length}');
+      await estateModel.requestEstate(filterModel);
+      filterModel.notifyUpdateCallback();
     }
     catch (e) {
-      print('_search() error : $e');
+      print('_search() requestEstate error : $e');
     }
     finally {
       progress.dismiss();

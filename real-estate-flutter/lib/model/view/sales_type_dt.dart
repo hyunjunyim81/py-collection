@@ -1,8 +1,12 @@
-import 'down_town.dart';
+import 'package:real_estate/api/data/article_response.dart';
 
-class SalesTypeDT
+import 'down_town.dart';
+import 'sales_type.dart';
+
+class SalesTypeDT extends SalesType<DownTown>
 {
-  List<DownTown> salesBuy = [];
-  List<DownTown> monthlyRent = [];
-  List<DownTown> shortTernRent = [];
+  @override
+  DownTown create(Body body) {
+    return DownTown.config(body);
+  }
 }

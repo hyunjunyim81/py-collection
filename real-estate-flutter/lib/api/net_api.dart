@@ -12,6 +12,8 @@ import 'package:real_estate/api/table/search_option.dart';
 
 import 'table/excel_reader.dart';
 
+typedef OnArticle = void Function(List<Body>);
+
 class NetAPI {
 
   static Future<Filter> searchResult(SearchOption option) async {
@@ -19,7 +21,7 @@ class NetAPI {
     String body = await NetCache.read(CacheType.search, '${option.gu} ${option.dong}');
     if (body.isEmpty) {
       var uri = Uri.https('m.land.naver.com', '/search/result/${option.gu} ${option.dong}');
-      http.Response response = await http.get(uri, headers: NetHeader.defaultHeaders);
+      http.Response response = await http.get(uri, headers: await NetHeader.randomHeader());
       body = response.body;
       //print(response.body);
       await NetCache.write(body, CacheType.search, '${option.gu} ${option.dong}');
@@ -49,7 +51,7 @@ class NetAPI {
           '&lon=${filter.lon}&btm=${filter.btm}&lft=${filter.lft}'
           '&top=${filter.top}&rgt=${filter.rgt}&pCortarNo='
           '&addon=COMPLEX&bAddon=COMPLEX&isOnlyIsale=false');
-      http.Response response = await http.get(uri, headers: NetHeader.randomHeader());
+      http.Response response = await http.get(uri, headers: await NetHeader.randomHeader());
       body = response.body;
       //print(response.body);
       await NetCache.write(body, CacheType.cluster, filter.cortarNo);
@@ -67,8 +69,8 @@ class NetAPI {
       });
   }
 
-  static Future<List<Body>> article(List<ARTICLE> articles) async {
-    List<Body> bodyList = [];
+  static Future<int> article(List<ARTICLE> articles, OnArticle onArticle) async {
+    int totalCnt = 0;
     for (var article in articles) {
       for (int i = 0; i < article.urls.length; ++i) {
         var url = article.urls[i];
@@ -76,7 +78,7 @@ class NetAPI {
           String body = await NetCache.read(CacheType.article, article.lgeo ?? "empty", page: i + 1);
           if (body.isEmpty) {
             var uri = Uri.parse(url);
-            http.Response response = await http.get(uri, headers: NetHeader.randomHeader());
+            http.Response response = await http.get(uri, headers: await NetHeader.randomHeader());
             body = response.body;
             await NetCache.write(body, CacheType.article, article.lgeo ?? "empty", page: i + 1);
             print('article url : $url');
@@ -88,19 +90,23 @@ class NetAPI {
           Map<String, dynamic> jsonData = jsonDecode(body);
           var articleResponse = ArticleResponse.fromJson(jsonData);
           if (articleResponse.body?.isNotEmpty ?? false) {
-            bodyList.addAll(articleResponse.body!);
+            onArticle(articleResponse.body!);
+            totalCnt += articleResponse.body!.length;
           }
           await Future.delayed(NetHeader.randomDuration());
           print('article body count : ${articleResponse.body?.length}');
-          //break;
+          if (i > 10) {
+            break;
+          }
         }
         catch(e) {
           print('article error url : $url');
+          print('article error : $e');
         }
       }
       break;
     }
-    print('article bodyList : ${bodyList.length}');
-    return bodyList;
+    print('article bodyList : $totalCnt');
+    return totalCnt;
   }
 }

@@ -47,10 +47,11 @@ class NetCache {
 
     var timeCheck = page < 2;
     var files = await _getAllDump(File(dumpPath));
-    if (page == 1 && files.length != totalCount) {
-      await _deleteFiles(files);
-      timeCheck = false;
-    }
+    // if (page == 1 && files.length != totalCount) {
+    //   print('NetCache length != totalCount');
+    //   await _deleteFiles(files);
+    //   timeCheck = false;
+    // }
 
     if (timeCheck) {
       var saveTs = int.parse(await metaFile.readAsString());
