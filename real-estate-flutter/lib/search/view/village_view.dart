@@ -11,6 +11,7 @@ import 'package:real_estate/common/view/dialog_form.dart';
 import 'package:real_estate/model/estate_model.dart';
 import 'package:real_estate/model/filter_model.dart';
 import 'package:real_estate/search/view/village_select_popup.dart';
+import 'package:real_estate/setting/view/setting_popup.dart';
 
 import 'search_view.dart';
 
@@ -91,7 +92,7 @@ class _VillageViewState extends State<VillageView> {
                   ),
                   IconButton(
                       onPressed: () {
-
+                        _showSettingPopup();
                       },
                       icon: const Icon(Icons.settings)
                   )
@@ -122,6 +123,14 @@ class _VillageViewState extends State<VillageView> {
     setState(() {
 
     });
+  }
+
+  void _showSettingPopup() {
+    SettingPopup().show(context, _updateFromSetting);
+  }
+
+  void _updateFromSetting() {
+    //filterModel.notifyUpdateCallback();
   }
 
   void _search() async {

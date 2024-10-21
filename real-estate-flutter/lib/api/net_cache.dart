@@ -34,6 +34,19 @@ class NetCache {
     return _flush(data, cacheType, fileName, page, totalCount);
   }
 
+  static Future<void> openCacheDir() async {
+    final Directory cacheDir = await getApplicationCacheDirectory();
+    await Process.run('explorer', [cacheDir.absolute.path]);
+  }
+
+  static Future<void> clearCacheDir() async {
+    final Directory cacheDir = await getApplicationCacheDirectory();
+    cacheDir.list().forEach((fs) async {
+      print('clearCacheDir ${fs.absolute.path}');
+      fs.delete(recursive: true);
+    });
+  }
+
   static Future<String> _check(CacheType cacheType, String fileName,
       int page, int totalCount) async {
     var dumpPath = await _generateDumpPath(cacheType, fileName, page);
@@ -47,11 +60,11 @@ class NetCache {
 
     var timeCheck = page < 2;
     var files = await _getAllDump(File(dumpPath));
-    // if (page == 1 && files.length != totalCount) {
-    //   print('NetCache length != totalCount');
-    //   await _deleteFiles(files);
-    //   timeCheck = false;
-    // }
+    if (page == 1 && files.length != totalCount) {
+      print('NetCache length != totalCount');
+      await _deleteFiles(files);
+      timeCheck = false;
+    }
 
     if (timeCheck) {
       var saveTs = int.parse(await metaFile.readAsString());
@@ -115,7 +128,7 @@ class NetCache {
 
   static Future<List<File>> _getAllDump(File dumpFile) async {
     List<File> files = [];
-    await dumpFile.parent.list().forEach((fs) async {
+    await dumpFile.parent.list().forEach((fs) {
       files.add(File(fs.path));
     });
     return files;
