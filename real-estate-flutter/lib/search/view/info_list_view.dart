@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:real_estate/api/data/filter.dart';
 import 'package:real_estate/app/app_context.dart';
 import 'package:real_estate/common/di/extension_get_it.dart';
+import 'package:real_estate/model/estate_model.dart';
 import 'package:real_estate/model/filter_model.dart';
 import 'package:real_estate/model/view/office.dart';
 import 'package:real_estate/model/view/thing.dart';
@@ -14,6 +16,7 @@ class InfoListView extends StatefulWidget {
 }
 
 class _InfoListViewState extends State<InfoListView> {
+  late final EstateModel estateModel = di.inject();
   late final FilterModel filterModel = di.inject();
   List<Thing> things = [];
 
@@ -48,7 +51,8 @@ class _InfoListViewState extends State<InfoListView> {
   }
 
   void _setupThings() {
-    if (AppContext.listDummy) {
+    if (AppContext.useDummy) {
+      estateModel.filter = Filter.dummy();
       things = [Office.dummy()];
     } else {
       things = filterModel.getThings();

@@ -1,4 +1,6 @@
+import 'package:real_estate/api/table/role_type.dart';
 import 'package:real_estate/api/table/search_option.dart';
+import 'package:real_estate/api/table/trade_type.dart';
 
 class Filter {
   late double lat;
@@ -41,5 +43,15 @@ class Filter {
     lft = double.parse(entry['lft'] ?? '0');
     top = double.parse(entry['top'] ?? '0');
     rgt = double.parse(entry['rgt'] ?? '0');
+  }
+
+  Filter.dummy() {
+    lat = 37.49911;
+    lon = 127.065463;
+    z = 14;
+    cortarNo = '1168010600';
+    cortarNm = '대치동';
+    rletTpCds = '$SG_code%3A$SMS_code';
+    tradTpCds = '$A1_code%3A$B1_code%3A$B2_code';
   }
 }

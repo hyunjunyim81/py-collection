@@ -2,6 +2,7 @@ import 'package:real_estate/api/data/article_response.dart';
 
 abstract class Thing
 {
+  late String atclNo; //"2451136972",
   late String atclNm; //"대형사무실",
   late String rletTpNm; //"사무실",
   late String tradTpCd; //"B2",
@@ -30,6 +31,7 @@ abstract class Thing
 
   void setting(Body other)
   {
+    atclNo = other.atclNo ?? '';
     atclNm = other.atclNm ?? '';
     rletTpNm = other.rletTpNm ?? '';
     tradTpCd = other.tradTpCd ?? '';
@@ -84,4 +86,6 @@ abstract class Thing
   String tags() {
     return tagList.toString().replaceAll('[', '').replaceAll(']', '');
   }
+
+  String rletTpCd();
 }

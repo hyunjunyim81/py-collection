@@ -1,7 +1,13 @@
+const String SG_name = '상가';
+const String SMS_name = '사무실';
+
+const String SG_code = 'SG';
+const String SMS_code = 'SMS';
+
 enum RoleType
 {
-  SG('상가', 'SG'),
-  SMS('사무실', 'SMS');
+  SG(SG_name, 'SG'),
+  SMS(SMS_name, 'SMS');
 
   final String name;
   final String key;

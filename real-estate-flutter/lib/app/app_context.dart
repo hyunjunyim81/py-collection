@@ -1,5 +1,5 @@
 
 class AppContext {
-  static const bool listDummy = true;
+  static const bool useDummy = true;
 
 }

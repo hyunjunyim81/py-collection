@@ -1,4 +1,5 @@
 import 'package:real_estate/api/data/article_response.dart';
+import 'package:real_estate/api/table/role_type.dart';
 
 import 'thing.dart';
 
@@ -10,7 +11,8 @@ class DownTown extends Thing
 
   DownTown.dummy()
   {
-    atclNm = '대형상기';
+    atclNo = "2450976476";
+    atclNm = '대형상가';
     rletTpNm = '상기';
     tradTpCd = 'B2';
     tradTpNm = '월세';
@@ -36,5 +38,10 @@ class DownTown extends Thing
     cpNm = '공실클럽';
     cpCnt = 1;
     rltrNm = '(주)원앤원부동산중개법인';
+  }
+
+  @override
+  String rletTpCd() {
+    return SG_code;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:real_estate/api/data/article_response.dart';
+import 'package:real_estate/api/table/role_type.dart';
 
 import 'thing.dart';
 
@@ -10,6 +11,7 @@ class Office extends Thing
 
    Office.dummy()
    {
+     atclNo = "2451136972";
      atclNm = '대형사무실';
      rletTpNm = '사무실';
      tradTpCd = 'B2';
@@ -37,4 +39,9 @@ class Office extends Thing
      cpCnt = 1;
      rltrNm = '(주)원앤원부동산중개법인';
    }
+
+  @override
+  String rletTpCd() {
+    return SMS_code;
+  }
 }

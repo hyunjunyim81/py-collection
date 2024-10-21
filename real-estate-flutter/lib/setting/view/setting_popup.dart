@@ -164,7 +164,7 @@ class _SettingPopupViewState extends State<_SettingPopupView> {
         },
         child: const Text(
             '닫기',
-            style: const TextStyle(fontSize: 20, color: Colors.black))
+            style: TextStyle(fontSize: 20, color: Colors.black))
     );
   }
 }

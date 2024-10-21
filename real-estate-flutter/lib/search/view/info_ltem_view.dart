@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:real_estate/api/net_api.dart';
+import 'package:real_estate/app/app_context.dart';
+import 'package:real_estate/common/di/extension_get_it.dart';
+import 'package:real_estate/model/estate_model.dart';
 import 'package:real_estate/model/view/thing.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InfoItemView extends StatelessWidget {
+  late final EstateModel estateModel = di.inject();
   Thing thing;
 
   InfoItemView({super.key, required this.thing});
@@ -10,8 +16,10 @@ class InfoItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return
       GestureDetector(
-          onTap: () {
-            print("SizedBox clicked");
+          onTap: () async {
+            if (AppContext.useDummy) {
+              await NetAPI.launchInBrowser(estateModel.filter!, thing);
+            }
           },
           child: Container(
             color: Colors.white,

@@ -9,6 +9,8 @@ import 'package:real_estate/api/data/filter.dart';
 import 'package:real_estate/api/net_cache.dart';
 import 'package:real_estate/api/net_header.dart';
 import 'package:real_estate/api/table/search_option.dart';
+import 'package:real_estate/model/view/thing.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'table/excel_reader.dart';
 
@@ -108,5 +110,12 @@ class NetAPI {
     }
     print('article bodyList : $totalCnt');
     return totalCnt;
+  }
+
+  static Future<void> launchInBrowser(Filter filter, Thing thing) async {
+    var url = Uri.parse('https://new.land.naver.com/offices?ms=${filter.lat},${filter.lon},${filter.z.toInt()}&a=${thing.rletTpCd()}&e=RETAIL&articleNo=${thing.atclNo}');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication,)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
