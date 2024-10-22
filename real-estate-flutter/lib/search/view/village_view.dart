@@ -5,8 +5,8 @@ import 'package:real_estate/api/table/trade_type.dart';
 import 'package:real_estate/api/table/village.dart';
 import 'package:real_estate/common/di/extension_get_it.dart';
 import 'package:real_estate/common/view/dialog_form.dart';
-import 'package:real_estate/model/estate_model.dart';
-import 'package:real_estate/model/filter_model.dart';
+import 'package:real_estate/repo/estate_repo.dart';
+import 'package:real_estate/repo/filter_repo.dart';
 import 'package:real_estate/search/view/village_select_popup.dart';
 import 'package:real_estate/setting/view/setting_popup.dart';
 
@@ -19,8 +19,8 @@ class VillageView extends StatefulWidget {
 
 
 class _VillageViewState extends State<VillageView> {
-  late final EstateModel estateModel = di.inject();
-  late final FilterModel filterModel = di.inject();
+  late final EstateRepo estateModel = di.inject();
+  late final FilterRepo filterModel = di.inject();
 
   @override
   void initState() {

@@ -3,9 +3,9 @@ import 'package:real_estate/api/data/filter.dart';
 import 'package:real_estate/api/net_api.dart';
 import 'package:real_estate/api/table/search_option.dart';
 import 'package:real_estate/api/table/village.dart';
-import 'package:real_estate/model/filter_model.dart';
+import 'filter_repo.dart';
 
-class EstateModel {
+class EstateRepo {
   Filter? filter;
   Cluster? cluster;
 
@@ -45,7 +45,7 @@ class EstateModel {
     }
   }
 
-  void requestEstate(FilterModel filterModel) async {
+  void requestEstate(FilterRepo filterModel) async {
     filter = await NetAPI.searchResult(getOption());
     print('requestEstate() filter : ${filter!.lat} / ${filter!.lon}');
     cluster = await NetAPI.cluster(filter!);

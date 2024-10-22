@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:real_estate/api/table/village.dart';
 import 'package:real_estate/common/di/extension_get_it.dart';
 import 'package:real_estate/common/view/dialog_form.dart';
-import 'package:real_estate/model/estate_model.dart';
+import 'package:real_estate/repo/estate_repo.dart';
 
 class VillageSelectPopup {
   bool _isDismiss = false;
@@ -61,7 +61,7 @@ class _VillageSelectView extends StatefulWidget {
 }
 
 class _VillageSelectViewState extends State<_VillageSelectView> {
-  late final EstateModel estateModel = di.inject();
+  late final EstateRepo estateModel = di.inject();
 
   @override
   Widget build(BuildContext context) {

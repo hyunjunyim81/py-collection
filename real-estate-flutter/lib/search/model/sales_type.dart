@@ -1,6 +1,6 @@
 import 'package:real_estate/api/data/article_response.dart';
 import 'package:real_estate/api/table/trade_type.dart';
-import 'package:real_estate/model/view/thing.dart';
+import 'thing.dart';
 
 abstract class SalesType<T>
 {

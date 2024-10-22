@@ -3,12 +3,11 @@ import 'dart:ui';
 import 'package:real_estate/api/data/article_response.dart';
 import 'package:real_estate/api/table/role_type.dart';
 import 'package:real_estate/api/table/trade_type.dart';
-import 'package:real_estate/model/view/sales_type_dt.dart';
-import 'package:real_estate/model/view/sales_type_office.dart';
+import 'package:real_estate/search/model/sales_type_dt.dart';
+import 'package:real_estate/search/model/sales_type_office.dart';
+import 'package:real_estate/search/model/thing.dart';
 
-import 'view/thing.dart';
-
-class FilterModel
+class FilterRepo
 {
    RoleType filterRoleType = RoleType.SG;
    TradeType filterTradeType = TradeType.A1;

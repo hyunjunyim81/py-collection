@@ -9,7 +9,7 @@ import 'package:real_estate/api/data/filter.dart';
 import 'package:real_estate/api/net_cache.dart';
 import 'package:real_estate/api/net_header.dart';
 import 'package:real_estate/api/table/search_option.dart';
-import 'package:real_estate/model/view/thing.dart';
+import 'package:real_estate/search/model/thing.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'table/excel_reader.dart';
