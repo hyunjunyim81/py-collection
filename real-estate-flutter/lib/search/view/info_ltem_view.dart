@@ -17,9 +17,7 @@ class InfoItemView extends StatelessWidget {
     return
       GestureDetector(
           onTap: () async {
-            if (AppContext.useDummy) {
-              await NetAPI.launchInBrowser(estateModel.filter!, thing);
-            }
+            await NetAPI.launchInBrowser(estateModel.filter!, thing);
           },
           child: Container(
             color: Colors.white,

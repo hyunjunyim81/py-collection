@@ -19,22 +19,44 @@ class _InfoListViewState extends State<InfoListView> {
   late final EstateModel estateModel = di.inject();
   late final FilterModel filterModel = di.inject();
   List<Thing> things = [];
+  String _statusMsg = '';
 
   @override
   void initState() {
     super.initState();
     filterModel.addUpdateCallback(_onFilterUpdate);
-
+    estateModel.addOnStatus(_onStatus);
   }
 
   @override
   Widget build(BuildContext context) {
     _setupThings();
-    return ListView.builder(
+    //_statusMsg = "123";
+    return Stack(
+      children: [
+        ListView.builder(
         itemCount: things.length,
-        itemBuilder: (BuildContext context, int index) {
-          return InfoItemView(thing: things[index]);
-        }
+            itemBuilder: (BuildContext context, int index) {
+              return InfoItemView(thing: things[index]);
+            }
+        ),
+        if (_statusMsg.isNotEmpty)
+        Container(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            margin: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black87,
+              ),
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.black12,
+            ),
+            child: Text(_statusMsg),
+          )
+        )
+      ],
     );
   }
 
@@ -42,6 +64,7 @@ class _InfoListViewState extends State<InfoListView> {
   void dispose() {
     super.dispose();
     filterModel.removeUpdateCallback(_onFilterUpdate);
+    estateModel.removeOnStatus(_onStatus);
   }
 
   void _onFilterUpdate() {
@@ -57,5 +80,17 @@ class _InfoListViewState extends State<InfoListView> {
     } else {
       things = filterModel.getThings();
     }
+  }
+
+  void _onStatus(int step, int totalStep) {
+    setState(() {
+      if (step == totalStep) {
+        _statusMsg = '';
+      }
+      else {
+        _statusMsg = '  진행율 : $step/$totalStep...  ';
+      }
+      //print('info_list_view _onStatus : $step / $totalStep');
+    });
   }
 }

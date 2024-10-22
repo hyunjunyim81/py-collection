@@ -1,4 +1,3 @@
-import 'package:real_estate/api/data/article_response.dart';
 import 'package:real_estate/api/data/cluster.dart';
 import 'package:real_estate/api/data/filter.dart';
 import 'package:real_estate/api/net_api.dart';
@@ -13,6 +12,7 @@ class EstateModel {
   List<Village> villageList = [];
   String selectedGu = '';
   String selectedDong = '';
+  List<OnStatus> _onStatusList = [];
 
   Village? findVillage(String gu) {
     try {
@@ -24,18 +24,40 @@ class EstateModel {
     return null;
   }
 
-  Future<void> requestEstate(FilterModel filterModel) async {
-    filter = await NetAPI.searchResult(SearchOption.basic(
+  SearchOption getOption() {
+    return SearchOption.basic(
       selectedGu: selectedGu,
       selectedDong: selectedDong,
-    ));
+    );
+  }
+
+  void addOnStatus(OnStatus s){
+    _onStatusList.add(s);
+  }
+
+  void removeOnStatus(OnStatus s) {
+    _onStatusList.remove(s);
+  }
+
+  void _notifyOnStatus(int step, int totalStep) {
+    for (var s in _onStatusList) {
+      s(step, totalStep);
+    }
+  }
+
+  void requestEstate(FilterModel filterModel) async {
+    filter = await NetAPI.searchResult(getOption());
     print('requestEstate() filter : ${filter!.lat} / ${filter!.lon}');
     cluster = await NetAPI.cluster(filter!);
-    print('requestEstate() cluster : ${cluster!.data?.totalCount()}');
+    print('requestEstate() cluster : ${cluster!.data!.totalCount()}');
     filterModel.reset();
-    int cnt = await NetAPI.article(cluster?.data?.article ?? [],
+    int cnt = await NetAPI.article(cluster!.data!,
         (bodies)  {
           filterModel.config(bodies);
+        },
+        (step, totalStep) {
+          _notifyOnStatus(step, totalStep);
+          print('requestEstate() step : $step / $totalStep');
         });
 
     print('requestEstate() article : ${cnt}');

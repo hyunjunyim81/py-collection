@@ -61,6 +61,14 @@ class Data {
     }
     return tc;
   }
+
+  int totalStep() {
+    int tc = 0;
+    for (ARTICLE a in article ?? []) {
+      tc += a.urls.length;
+    }
+    return tc;
+  }
 }
 
 class ARTICLE {

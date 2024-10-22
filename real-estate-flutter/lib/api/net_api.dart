@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'table/excel_reader.dart';
 
 typedef OnArticle = void Function(List<Body>);
+typedef OnStatus = void Function(int, int);
 
 class NetAPI {
 
@@ -71,14 +72,17 @@ class NetAPI {
       });
   }
 
-  static Future<int> article(List<ARTICLE> articles, OnArticle onArticle) async {
+  static Future<int> article(Data data, OnArticle onArticle, OnStatus onStatus) async {
     int totalCnt = 0;
-    for (var article in articles) {
+    int totalStep = data.totalStep();
+    int step = 0;
+    for (var article in data.article ?? []) {
       for (int i = 0; i < article.urls.length; ++i) {
         var url = article.urls[i];
         try {
           String body = await NetCache.read(CacheType.article, article.lgeo ?? "empty", page: i + 1);
-          if (body.isEmpty) {
+          bool usedCache = body.isNotEmpty;
+          if (!usedCache) {
             var uri = Uri.parse(url);
             http.Response response = await http.get(uri, headers: await NetHeader.randomHeader());
             body = response.body;
@@ -95,7 +99,7 @@ class NetAPI {
             onArticle(articleResponse.body!);
             totalCnt += articleResponse.body!.length;
           }
-          await Future.delayed(NetHeader.randomDuration());
+          await Future.delayed(NetHeader.randomDuration(usedCache));
           print('article body count : ${articleResponse.body?.length}');
           if (i > 10) {
             break;
@@ -105,15 +109,19 @@ class NetAPI {
           print('article error url : $url');
           print('article error : $e');
         }
+        onStatus(++step, totalStep);
       }
       break;
     }
+
+    onStatus(totalStep, totalStep);
     print('article bodyList : $totalCnt');
     return totalCnt;
   }
 
   static Future<void> launchInBrowser(Filter filter, Thing thing) async {
-    var url = Uri.parse('https://new.land.naver.com/offices?ms=${filter.lat},${filter.lon},${filter.z.toInt()}&a=${thing.rletTpCd()}&e=RETAIL&articleNo=${thing.atclNo}');
+    var url = Uri.parse('https://fin.land.naver.com/articles/${thing.atclNo}');
+    print('launchInBrowser ${url.toString()}');
     if (!await launchUrl(url, mode: LaunchMode.externalApplication,)) {
       throw Exception('Could not launch $url');
     }

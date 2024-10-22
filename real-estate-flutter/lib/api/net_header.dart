@@ -11,8 +11,13 @@ class NetHeader {
     "User-Agent":"Mozilla/5.0 (Linux; Android 8.0.0; SM-G955U Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36"
   };
 
-  static Duration randomDuration() {
-    return Duration(microseconds: 500 + Random().nextInt(500));
+  static Duration randomDuration(bool usedCache) {
+    if (usedCache) {
+      return const Duration(microseconds: 100);
+    }
+    else {
+      return Duration(microseconds: 1500 + Random().nextInt(1500) - 500);
+    }
   }
 
   static Future<Map<String, String>> randomHeader() async {
