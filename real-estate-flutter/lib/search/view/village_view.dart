@@ -127,6 +127,7 @@ class _VillageViewState extends State<VillageView> {
       onTap: () {
         setState(() {
           filterModel.filterRoleType = RoleType.SG;
+          filterModel.notifyUpdateCallback();
         });
       },
       child: Container(
@@ -165,6 +166,7 @@ class _VillageViewState extends State<VillageView> {
       onTap: () {
         setState(() {
           filterModel.filterRoleType = RoleType.SMS;
+          filterModel.notifyUpdateCallback();
         });
       },
       child: Container(
@@ -203,6 +205,7 @@ class _VillageViewState extends State<VillageView> {
       onTap: () {
         setState(() {
           filterModel.filterTradeType = TradeType.A1;
+          filterModel.notifyUpdateCallback();
         });
       },
       child: Container(
@@ -241,6 +244,7 @@ class _VillageViewState extends State<VillageView> {
       onTap: () {
         setState(() {
           filterModel.filterTradeType = TradeType.B2;
+          filterModel.notifyUpdateCallback();
         });
       },
       child: Container(
@@ -279,6 +283,7 @@ class _VillageViewState extends State<VillageView> {
       onTap: () {
         setState(() {
           filterModel.filterTradeType = TradeType.B3;
+          filterModel.notifyUpdateCallback();
         });
       },
       child: Container(

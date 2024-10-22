@@ -77,16 +77,21 @@ class NetAPI {
     int totalStep = data.totalStep();
     int step = 0;
     for (var article in data.article ?? []) {
+      bool usedCache = false;
       for (int i = 0; i < article.urls.length; ++i) {
         var url = article.urls[i];
         try {
-          String body = await NetCache.read(CacheType.article, article.lgeo ?? "empty", page: i + 1);
-          bool usedCache = body.isNotEmpty;
+          String body = await NetCache.read(CacheType.article,
+              article.lgeo ?? "empty",
+              page: i + 1, totalPageCnt: article.urls.length);
+          usedCache = body.isNotEmpty;
           if (!usedCache) {
             var uri = Uri.parse(url);
             http.Response response = await http.get(uri, headers: await NetHeader.randomHeader());
             body = response.body;
-            await NetCache.write(body, CacheType.article, article.lgeo ?? "empty", page: i + 1);
+            await NetCache.write(body, CacheType.article,
+                article.lgeo ?? "empty",
+                page: i + 1, totalPageCnt: article.urls.length);
             print('article url : $url');
           }
           else {
@@ -99,19 +104,15 @@ class NetAPI {
             onArticle(articleResponse.body!);
             totalCnt += articleResponse.body!.length;
           }
-          await Future.delayed(NetHeader.randomDuration(usedCache));
           print('article body count : ${articleResponse.body?.length}');
-          if (i > 10) {
-            break;
-          }
         }
         catch(e) {
           print('article error url : $url');
           print('article error : $e');
         }
+        await Future.delayed(NetHeader.randomDuration(usedCache));
         onStatus(++step, totalStep);
       }
-      break;
     }
 
     onStatus(totalStep, totalStep);

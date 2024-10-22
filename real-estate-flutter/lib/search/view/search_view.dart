@@ -25,9 +25,9 @@ class _SearchViewState extends PageState<SearchView> {
         Container(
           height: 90,
           color: Colors.white,
-          child: VillageView(),
+          child: const VillageView(),
         ),
-        Expanded(
+        const Expanded(
             child: InfoListView(),
         ),
       ],

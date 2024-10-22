@@ -62,6 +62,14 @@ class Data {
     return tc;
   }
 
+  int totalPageCnt() {
+    int tc = 0;
+    for (ARTICLE a in article ?? []) {
+      tc += a.len_pages ?? 0;
+    }
+    return tc;
+  }
+
   int totalStep() {
     int tc = 0;
     for (ARTICLE a in article ?? []) {

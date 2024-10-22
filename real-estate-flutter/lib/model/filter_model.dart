@@ -60,6 +60,13 @@ class FilterModel
    }
 
    List<Thing> getThings() {
-      return downtown.getThings();
+      switch (filterRoleType) {
+         case RoleType.SMS:
+            return office.getThings(filterTradeType);
+         case RoleType.SG:
+            return downtown.getThings(filterTradeType);
+         default:
+            return [];
+      }
    }
 }

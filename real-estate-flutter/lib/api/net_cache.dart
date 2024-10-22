@@ -17,21 +17,21 @@ class NetCache {
   static const int _3hourToMilliseconds = 1000 * 60 * 60 * 3;
 
   static Future<String> read(CacheType cacheType, String fileName,
-      {int page = _invalidPage, int totalCount = _zero}) async {
+      {int page = _invalidPage, int totalPageCnt = _zero}) async {
     if (false == await _createDir(cacheType, page == _invalidPage ? "" : fileName)) {
       print('NetCache read _createDir fail');
       return '';
     }
-    return _check(cacheType, fileName, page, totalCount);
+    return _check(cacheType, fileName, page, totalPageCnt);
   }
 
   static Future<void> write(String data, CacheType cacheType, String fileName,
-      {int page = _invalidPage, int totalCount = _zero}) async {
+      {int page = _invalidPage, int totalPageCnt = _zero}) async {
     if (false == await _createDir(cacheType, page == _invalidPage ? "" : fileName)) {
       print('NetCache write _createDir fail');
       return;
     }
-    return _flush(data, cacheType, fileName, page, totalCount);
+    return _flush(data, cacheType, fileName, page, totalPageCnt);
   }
 
   static Future<void> openCacheDir() async {
@@ -48,7 +48,7 @@ class NetCache {
   }
 
   static Future<String> _check(CacheType cacheType, String fileName,
-      int page, int totalCount) async {
+      int page, int totalPageCnt) async {
     var dumpPath = await _generateDumpPath(cacheType, fileName, page);
     var metaPath = await _generateMetaPath(cacheType, fileName);
 
@@ -60,8 +60,8 @@ class NetCache {
 
     var timeCheck = page < 2;
     var files = await _getAllDump(File(dumpPath));
-    if (page == 1 && files.length != totalCount) {
-      print('NetCache length != totalCount');
+    if (page == 1 && files.length != totalPageCnt) {
+      print('NetCache ${files.length} != $totalPageCnt');
       await _deleteFiles(files);
       timeCheck = false;
     }
@@ -89,7 +89,7 @@ class NetCache {
   }
 
   static Future<void> _flush(String data, CacheType cacheType, String fileName,
-      int page, int totalCount) async {
+      int page, int totalPageCnt) async {
     var dumpPath = await _generateDumpPath(cacheType, fileName, page);
     var metaPath = await _generateMetaPath(cacheType, fileName);
 

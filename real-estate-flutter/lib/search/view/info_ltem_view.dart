@@ -79,6 +79,7 @@ class InfoItemView extends StatelessWidget {
         Container(
           padding: const EdgeInsets.only(left: 5, right: 5),
           child: Text(thing.atclFetrDesc,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontSize: 14,
                   color: Colors.black87)),
         ),

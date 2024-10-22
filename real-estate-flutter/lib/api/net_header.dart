@@ -13,10 +13,10 @@ class NetHeader {
 
   static Duration randomDuration(bool usedCache) {
     if (usedCache) {
-      return const Duration(microseconds: 100);
+      return const Duration(milliseconds: 100);
     }
     else {
-      return Duration(microseconds: 1500 + Random().nextInt(1500) - 500);
+      return Duration(milliseconds: 3000 + Random().nextInt(1500) - 500);
     }
   }
 

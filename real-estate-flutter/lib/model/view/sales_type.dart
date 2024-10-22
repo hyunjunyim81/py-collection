@@ -33,7 +33,16 @@ abstract class SalesType<T>
 
   T create(Body body);
 
-  List<Thing> getThings() {
-    return salesBuy;
+  List<Thing> getThings(TradeType treadType) {
+    switch (treadType) {
+      case TradeType.A1:
+        return salesBuy;
+      case TradeType.B2:
+        return monthlyRent;
+      case TradeType.B3:
+        return shortTernRent;
+      default:
+        return [];
+    }
   }
 }

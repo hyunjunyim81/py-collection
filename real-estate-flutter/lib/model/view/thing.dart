@@ -66,20 +66,23 @@ abstract class Thing
   }
 
   String priceUnit() {
-    if (prc >= 10000) {
-      return '${prc~/10000}억 ${(prc%10000).toInt()}만';
-    }
-    else {
-      return '$prc만';
-    }
+    return _price(prc);
   }
 
   String rentPriceUnit() {
-    if (rentPrc >= 10000) {
-      return '${rentPrc~/10000}억 ${(rentPrc%10000).toInt()}만';
+    return _price(rentPrc);
+  }
+
+  String _price(int price) {
+    int first = price~/10000;
+    int second = (price%10000).toInt();
+    if (first > 0) {
+      return second == 0
+          ? '${price~/10000}억'
+          : '${price~/10000}억 ${(price%10000).toInt()}만';
     }
     else {
-      return '$rentPrc만';
+      return '$second만';
     }
   }
 

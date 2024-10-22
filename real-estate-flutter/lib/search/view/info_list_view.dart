@@ -48,12 +48,16 @@ class _InfoListViewState extends State<InfoListView> {
             padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
               border: Border.all(
-                color: Colors.black87,
+                color: Colors.grey,
               ),
               borderRadius: BorderRadius.circular(10),
-              color: Colors.black12,
+              color: Colors.black38,
             ),
-            child: Text(_statusMsg),
+            child: Text(_statusMsg,
+                style: const TextStyle(fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)
+            ),
           )
         )
       ],
