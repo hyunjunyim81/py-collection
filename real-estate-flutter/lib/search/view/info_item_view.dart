@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:real_estate/api/net_api.dart';
-import 'package:real_estate/app/app_context.dart';
 import 'package:real_estate/common/di/extension_get_it.dart';
 import 'package:real_estate/repo/estate_repo.dart';
 import 'package:real_estate/search/model/thing.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class InfoItemView extends StatelessWidget {
-  late final EstateRepo estateModel = di.inject();
+  late final EstateRepo estateRepo = di.inject();
   Thing thing;
 
   InfoItemView({super.key, required this.thing});
@@ -17,7 +15,7 @@ class InfoItemView extends StatelessWidget {
     return
       GestureDetector(
           onTap: () async {
-            await NetAPI.launchInBrowser(estateModel.filter!, thing);
+            await NetAPI.launchInBrowser(estateRepo.filter!, thing);
           },
           child: Container(
             color: Colors.white,
@@ -65,7 +63,7 @@ class InfoItemView extends StatelessWidget {
         Container(
           padding: const EdgeInsets.only(left: 5, right: 5),
           margin: const EdgeInsets.only(bottom: 2),
-          child: Text('${thing.flrInfo}층',
+          child: Text('${thing.flrInfo}층  ${thing.spaceSquare()}(${thing.spaceKor()})',
               style: const TextStyle(fontSize: 14, color: Colors.black)),
         ),
       ],

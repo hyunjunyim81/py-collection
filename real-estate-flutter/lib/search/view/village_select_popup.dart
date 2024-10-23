@@ -61,7 +61,7 @@ class _VillageSelectView extends StatefulWidget {
 }
 
 class _VillageSelectViewState extends State<_VillageSelectView> {
-  late final EstateRepo estateModel = di.inject();
+  late final EstateRepo estateRepo = di.inject();
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +88,11 @@ class _VillageSelectViewState extends State<_VillageSelectView> {
     return GridView.builder(
       shrinkWrap: true,
       //physics: const NeverScrollableScrollPhysics(),
-      itemCount: estateModel.villageList.length,
+      itemCount: estateRepo.villageList.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3, childAspectRatio: 3,),
       itemBuilder: (context, itemIndex) {
-        return _itemForGu(estateModel.villageList[itemIndex]);
+        return _itemForGu(estateRepo.villageList[itemIndex]);
       },
     );
   }
@@ -151,8 +151,8 @@ class _VillageSelectViewState extends State<_VillageSelectView> {
         ),
         onPressed: () {
           setState(() {
-            estateModel.selectedGu = widget.selectedVillage!.gu;
-            estateModel.selectedDong = dong;
+            estateRepo.selectedGu = widget.selectedVillage!.gu;
+            estateRepo.selectedDong = dong;
             widget.reload.call();
             widget.popup.dismiss();
           });

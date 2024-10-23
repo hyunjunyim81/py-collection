@@ -1,4 +1,5 @@
 import 'package:real_estate/api/data/article_response.dart';
+import 'package:real_estate/common/util/num_util.dart';
 
 abstract class Thing
 {
@@ -73,6 +74,20 @@ abstract class Thing
     return _price(rentPrc);
   }
 
+  String tags() {
+    return tagList.toString().replaceAll('[', '').replaceAll(']', '');
+  }
+
+  String rletTpCd();
+
+  String spaceSquare() {
+    return '${spc1.toStringAsDynamic(2)}/${spc2.toStringAsDynamic(2)}㎡';
+  }
+
+  String spaceKor() {
+    return '${(spc1*0.3025).toStringAsDynamic(2)}/${(spc2*0.3025).toStringAsDynamic(2)}평';
+  }
+
   String _price(int price) {
     int first = price~/10000;
     int second = (price%10000).toInt();
@@ -85,10 +100,4 @@ abstract class Thing
       return '$second만';
     }
   }
-
-  String tags() {
-    return tagList.toString().replaceAll('[', '').replaceAll(']', '');
-  }
-
-  String rletTpCd();
 }

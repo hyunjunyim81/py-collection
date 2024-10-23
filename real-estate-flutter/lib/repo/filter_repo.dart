@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:real_estate/api/data/article_response.dart';
 import 'package:real_estate/api/table/role_type.dart';
 import 'package:real_estate/api/table/trade_type.dart';
@@ -9,8 +10,14 @@ import 'package:real_estate/search/model/thing.dart';
 
 class FilterRepo
 {
+   static const double minRangeValue = 0;
+   static const double maxRangeValue = 1001;
+   static const RangeValues defaultRangeValues = RangeValues(minRangeValue, maxRangeValue);
+
    RoleType filterRoleType = RoleType.SG;
    TradeType filterTradeType = TradeType.A1;
+
+   RangeValues filterRangeValues = defaultRangeValues;
 
    SalesTypeDT downtown = SalesTypeDT();
    SalesTypeOffice office = SalesTypeOffice();
@@ -67,5 +74,18 @@ class FilterRepo
          default:
             return [];
       }
+   }
+
+   String spaceRangeString(RangeValues rangeValues) {
+      var start = '';
+      var end = '';
+      if (rangeValues.start != minRangeValue) {
+         start = rangeValues.start.toInt().toString();
+      }
+
+      if (rangeValues.end != maxRangeValue) {
+         end = rangeValues.end.toInt().toString();
+      }
+      return start.isEmpty && end.isEmpty ? '전체' : '$start~$end평';
    }
 }

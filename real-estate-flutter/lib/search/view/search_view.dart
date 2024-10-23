@@ -23,7 +23,7 @@ class _SearchViewState extends PageState<SearchView> {
     return Column(
       children: [
         Container(
-          height: 90,
+          height: 110,
           color: Colors.white,
           child: const VillageView(),
         ),

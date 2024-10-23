@@ -16,16 +16,16 @@ class InfoListView extends StatefulWidget {
 }
 
 class _InfoListViewState extends State<InfoListView> {
-  late final EstateRepo estateModel = di.inject();
-  late final FilterRepo filterModel = di.inject();
+  late final EstateRepo estateRepo = di.inject();
+  late final FilterRepo filterRepo = di.inject();
   List<Thing> things = [];
   String _statusMsg = '';
 
   @override
   void initState() {
     super.initState();
-    filterModel.addUpdateCallback(_onFilterUpdate);
-    estateModel.addOnStatus(_onStatus);
+    filterRepo.addUpdateCallback(_onFilterUpdate);
+    estateRepo.addOnStatus(_onStatus);
   }
 
   @override
@@ -67,22 +67,22 @@ class _InfoListViewState extends State<InfoListView> {
   @override
   void dispose() {
     super.dispose();
-    filterModel.removeUpdateCallback(_onFilterUpdate);
-    estateModel.removeOnStatus(_onStatus);
+    filterRepo.removeUpdateCallback(_onFilterUpdate);
+    estateRepo.removeOnStatus(_onStatus);
   }
 
   void _onFilterUpdate() {
     setState(() {
-      print('onFilterUpdate ${filterModel.getThings().length}');
+      print('onFilterUpdate ${filterRepo.getThings().length}');
     });
   }
 
   void _setupThings() {
     if (AppContext.useDummy) {
-      estateModel.filter = Filter.dummy();
+      estateRepo.filter = Filter.dummy();
       things = [Office.dummy()];
     } else {
-      things = filterModel.getThings();
+      things = filterRepo.getThings();
     }
   }
 

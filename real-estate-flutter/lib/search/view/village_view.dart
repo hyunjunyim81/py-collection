@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:real_estate/api/table/excel_reader.dart';
 import 'package:real_estate/api/table/role_type.dart';
 import 'package:real_estate/api/table/trade_type.dart';
@@ -10,6 +11,8 @@ import 'package:real_estate/repo/filter_repo.dart';
 import 'package:real_estate/search/view/village_select_popup.dart';
 import 'package:real_estate/setting/view/setting_popup.dart';
 
+import 'space_select_popup.dart';
+
 class VillageView extends StatefulWidget {
   const VillageView({super.key});
 
@@ -19,8 +22,8 @@ class VillageView extends StatefulWidget {
 
 
 class _VillageViewState extends State<VillageView> {
-  late final EstateRepo estateModel = di.inject();
-  late final FilterRepo filterModel = di.inject();
+  late final EstateRepo estateRepo = di.inject();
+  late final FilterRepo filterRepo = di.inject();
 
   @override
   void initState() {
@@ -36,6 +39,7 @@ class _VillageViewState extends State<VillageView> {
       children: [
         _firstColumn(),
         _secondColumn(),
+        _thirdColumn(),
       ],
     );
   }
@@ -55,7 +59,7 @@ class _VillageViewState extends State<VillageView> {
               _showSelectPopup(null);
             },
             child: Text(
-                estateModel.selectedGu.isEmpty ? '선택' : estateModel.selectedGu,
+                estateRepo.selectedGu.isEmpty ? '선택' : estateRepo.selectedGu,
                 style: const TextStyle(fontSize: 18, color: Colors.white)
             ),
           ),
@@ -69,10 +73,10 @@ class _VillageViewState extends State<VillageView> {
                   Colors.blueAccent),
             ),
             onPressed: () {
-              _showSelectPopup(estateModel.findVillage(estateModel.selectedGu));
+              _showSelectPopup(estateRepo.findVillage(estateRepo.selectedGu));
             },
             child: Text(
-                estateModel.selectedDong.isEmpty ? '선택' : estateModel
+                estateRepo.selectedDong.isEmpty ? '선택' : estateRepo
                     .selectedDong,
                 style: const TextStyle(fontSize: 18, color: Colors.white)
             ),
@@ -88,7 +92,7 @@ class _VillageViewState extends State<VillageView> {
                 children: [
                   IconButton(
                       onPressed: () {
-                        if (estateModel.selectedDong.isNotEmpty) {
+                        if (estateRepo.selectedDong.isNotEmpty) {
                           _search();
                         }
                       },
@@ -126,8 +130,8 @@ class _VillageViewState extends State<VillageView> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          filterModel.filterRoleType = RoleType.SG;
-          filterModel.notifyUpdateCallback();
+          filterRepo.filterRoleType = RoleType.SG;
+          filterRepo.notifyUpdateCallback();
         });
       },
       child: Container(
@@ -139,7 +143,7 @@ class _VillageViewState extends State<VillageView> {
             SizedBox(
               width: 20,
               height: 20,
-              child: filterModel.filterRoleType == RoleType.SG
+              child: filterRepo.filterRoleType == RoleType.SG
                   ? const Icon(
                 Icons.radio_button_checked, color: Colors.blue,)
                   : const Icon(
@@ -165,8 +169,8 @@ class _VillageViewState extends State<VillageView> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          filterModel.filterRoleType = RoleType.SMS;
-          filterModel.notifyUpdateCallback();
+          filterRepo.filterRoleType = RoleType.SMS;
+          filterRepo.notifyUpdateCallback();
         });
       },
       child: Container(
@@ -178,7 +182,7 @@ class _VillageViewState extends State<VillageView> {
             SizedBox(
               width: 20,
               height: 20,
-              child: filterModel.filterRoleType == RoleType.SMS
+              child: filterRepo.filterRoleType == RoleType.SMS
                   ? const Icon(
                 Icons.radio_button_checked, color: Colors.blue,)
                   : const Icon(
@@ -204,8 +208,8 @@ class _VillageViewState extends State<VillageView> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          filterModel.filterTradeType = TradeType.A1;
-          filterModel.notifyUpdateCallback();
+          filterRepo.filterTradeType = TradeType.A1;
+          filterRepo.notifyUpdateCallback();
         });
       },
       child: Container(
@@ -217,7 +221,7 @@ class _VillageViewState extends State<VillageView> {
             SizedBox(
               width: 20,
               height: 20,
-              child: filterModel.filterTradeType == TradeType.A1
+              child: filterRepo.filterTradeType == TradeType.A1
                   ? const Icon(
                 Icons.radio_button_checked, color: Colors.blue,)
                   : const Icon(
@@ -243,8 +247,8 @@ class _VillageViewState extends State<VillageView> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          filterModel.filterTradeType = TradeType.B2;
-          filterModel.notifyUpdateCallback();
+          filterRepo.filterTradeType = TradeType.B2;
+          filterRepo.notifyUpdateCallback();
         });
       },
       child: Container(
@@ -256,7 +260,7 @@ class _VillageViewState extends State<VillageView> {
             SizedBox(
               width: 20,
               height: 20,
-              child: filterModel.filterTradeType == TradeType.B2
+              child: filterRepo.filterTradeType == TradeType.B2
                   ? const Icon(
                 Icons.radio_button_checked, color: Colors.blue,)
                   : const Icon(
@@ -282,8 +286,8 @@ class _VillageViewState extends State<VillageView> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          filterModel.filterTradeType = TradeType.B3;
-          filterModel.notifyUpdateCallback();
+          filterRepo.filterTradeType = TradeType.B3;
+          filterRepo.notifyUpdateCallback();
         });
       },
       child: Container(
@@ -295,7 +299,7 @@ class _VillageViewState extends State<VillageView> {
             SizedBox(
               width: 20,
               height: 20,
-              child: filterModel.filterTradeType == TradeType.B3
+              child: filterRepo.filterTradeType == TradeType.B3
                   ? const Icon(
                 Icons.radio_button_checked, color: Colors.blue,)
                   : const Icon(
@@ -321,9 +325,9 @@ class _VillageViewState extends State<VillageView> {
     var list = await ExcelReader.village();
     if (list.isNotEmpty) {
       setState(() {
-        estateModel.villageList.clear();
-        estateModel.villageList.addAll(list);
-        print('Village : ${estateModel.villageList.length}');
+        estateRepo.villageList.clear();
+        estateRepo.villageList.addAll(list);
+        print('Village : ${estateRepo.villageList.length}');
       });
     }
   }
@@ -349,7 +353,7 @@ class _VillageViewState extends State<VillageView> {
   void _search() async {
     var progress = DialogForm().showProgress(context);
     try {
-      estateModel.requestEstate(filterModel);
+      estateRepo.requestEstate(filterRepo);
       //filterModel.notifyUpdateCallback();
     }
     catch (e) {
@@ -358,5 +362,43 @@ class _VillageViewState extends State<VillageView> {
     finally {
       progress.dismiss();
     }
+  }
+
+  Widget _thirdColumn() {
+    return Row(
+      children: [
+        const SizedBox(width: 20,),
+        _space(),
+      ],
+    );
+  }
+
+  Widget _space() {
+    return SizedBox(
+      width: 140,
+      height: 30,
+      child: TextButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+              side: const BorderSide(
+                width: 2,
+                color: Colors.grey,
+              ),
+            )
+          ),
+        ),
+        onPressed: _showSpacePopup,
+        child: Text(
+            '면적 ${filterRepo.spaceRangeString(filterRepo.filterRangeValues)}',
+            style: const TextStyle(fontSize: 14, color: Colors.black)
+        ),
+      ),
+    );
+  }
+
+  void _showSpacePopup() {
+    SpaceSelectPopup().show(context, _update);
   }
 }
