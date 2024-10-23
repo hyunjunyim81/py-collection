@@ -11,7 +11,7 @@ import 'package:real_estate/repo/filter_repo.dart';
 import 'package:real_estate/search/view/village_select_popup.dart';
 import 'package:real_estate/setting/view/setting_popup.dart';
 
-import 'space_select_popup.dart';
+import 'space_range_popup.dart';
 
 class VillageView extends StatefulWidget {
   const VillageView({super.key});
@@ -369,6 +369,10 @@ class _VillageViewState extends State<VillageView> {
       children: [
         const SizedBox(width: 20,),
         _space(),
+        const SizedBox(width: 20,),
+        _sale(),
+        const SizedBox(width: 20,),
+        _rent(),
       ],
     );
   }
@@ -391,7 +395,7 @@ class _VillageViewState extends State<VillageView> {
         ),
         onPressed: _showSpacePopup,
         child: Text(
-            '면적 ${filterRepo.spaceRangeString(filterRepo.filterRangeValues)}',
+            '면적 ${filterRepo.spaceRangeString(filterRepo.filterSpaceValues)}',
             style: const TextStyle(fontSize: 14, color: Colors.black)
         ),
       ),
@@ -399,6 +403,64 @@ class _VillageViewState extends State<VillageView> {
   }
 
   void _showSpacePopup() {
-    SpaceSelectPopup().show(context, _update);
+    SpaceRangePopup().show(context, _update);
+  }
+
+  Widget _sale() {
+    return SizedBox(
+      width: 180,
+      height: 30,
+      child: TextButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                side: const BorderSide(
+                  width: 2,
+                  color: Colors.grey,
+                ),
+              )
+          ),
+        ),
+        onPressed: _showSpacePopup,
+        child: Text(
+            '매매/보증금 ${filterRepo.spaceRangeString(filterRepo.filterSpaceValues)}',
+            style: const TextStyle(fontSize: 14, color: Colors.black)
+        ),
+      ),
+    );
+  }
+
+  void _showSalePopup() {
+    //SpaceRangePopup().show(context, _update);
+  }
+
+  Widget _rent() {
+    return SizedBox(
+      width: 180,
+      height: 30,
+      child: TextButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                side: const BorderSide(
+                  width: 2,
+                  color: Colors.grey,
+                ),
+              )
+          ),
+        ),
+        onPressed: _showSpacePopup,
+        child: Text(
+            '월세 ${filterRepo.spaceRangeString(filterRepo.filterSpaceValues)}',
+            style: const TextStyle(fontSize: 14, color: Colors.black)
+        ),
+      ),
+    );
+  }
+
+  void _showRentPopup() {
+    //SpaceRangePopup().show(context, _update);
   }
 }

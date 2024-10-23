@@ -7,7 +7,7 @@ import 'package:real_estate/common/view/dialog_form.dart';
 import 'package:real_estate/repo/estate_repo.dart';
 import 'package:real_estate/repo/filter_repo.dart';
 
-class SpaceSelectPopup {
+class SalePricePopup {
   bool _isDismiss = false;
   late DialogRoute route;
 
@@ -41,7 +41,7 @@ class SpaceSelectPopup {
             content: SizedBox(
               width: 600,
               height: 400,
-              child: _SpaceSelectView(reload: reload, popup: this),
+              child: _SalePriceView(reload: reload, popup: this),
             )
         );
       },
@@ -49,28 +49,32 @@ class SpaceSelectPopup {
   }
 }
 
-class _SpaceSelectView extends StatefulWidget {
-  final SpaceSelectPopup popup;
+class _SalePriceView extends StatefulWidget {
+  final SalePricePopup popup;
   final Function reload;
 
-  _SpaceSelectView({super.key, required this.popup, required this.reload});
+  _SalePriceView({super.key, required this.popup, required this.reload});
 
   @override
-  State<StatefulWidget> createState() => _SpaceSelectViewState();
+  State<StatefulWidget> createState() => _SalePriceViewState();
 }
 
-class _SpaceSelectViewState extends State<_SpaceSelectView> {
+class _SalePriceViewState extends State<_SalePriceView> {
   late final EstateRepo estateRepo = di.inject();
   late final FilterRepo filterRepo = di.inject();
   late RangeValues _currentRangeValues;
-  final List<List<double>> _spaceRangeUnits = [[0, 50], [50, 100], [100, 200],
-    [200, 300], [300, 400], [400, 500], [500, 600], [600, 700],
-    [700, 800], [800, 900], [900, 1000], [1000, 1001]];
+  final List<List<double>> _rangeUnits = [[0, 5000], [5000, 10000],
+    [10000, 20000], [20000, 30000], [30000, 40000],
+    [40000, 50000], [50000, 60000], [60000, 70000],
+    [70000, 80000], [80000, 90000], [90000, 100000],
+    [100000, 150000], [150000, 200000], [200000, 400000],
+    [400000, 600000], [600000, 800000], [800000, 1000000],
+    [1000000, 1000001]];
 
   @override
   void initState() {
     super.initState();
-    _currentRangeValues = filterRepo.filterRangeValues;
+    _currentRangeValues = filterRepo.filterSpaceValues;
   }
 
   @override
@@ -108,14 +112,14 @@ class _SpaceSelectViewState extends State<_SpaceSelectView> {
         labels: RangeLabels(
             _currentRangeValues.start.toInt().toString(),
             _currentRangeValues.end == 1001
-            ? '무한' : _currentRangeValues.end.toInt().toString(),
+            ? '전체' : _currentRangeValues.end.toInt().toString(),
         ),
         onChanged: (RangeValues values) {
           setState(() {
             if (values.end > values.start) {
               _currentRangeValues = values;
             } else {
-              if (values.start == FilterRepo.minRangeValue) {
+              if (values.start == FilterRepo.minSpaceValue) {
                 _currentRangeValues = const RangeValues(0, 1);
               } else {
                 _currentRangeValues = RangeValues(values.end - 1, values.end);
@@ -137,7 +141,7 @@ class _SpaceSelectViewState extends State<_SpaceSelectView> {
           const SizedBox(width: 10,),
           Expanded(
             child: Container(alignment: Alignment.centerLeft,
-              child: Text('면적  ${filterRepo.spaceRangeString(_currentRangeValues)}',
+              child: Text('매매/보증금  ${filterRepo.spaceRangeString(_currentRangeValues)}',
                   style: const TextStyle(fontSize: 24, color: Colors.black)),
             ),
           ),
@@ -166,7 +170,7 @@ class _SpaceSelectViewState extends State<_SpaceSelectView> {
           ),
         ),
         onPressed: () {
-          filterRepo.filterRangeValues = _currentRangeValues;
+          filterRepo.filterSpaceValues = _currentRangeValues;
           widget.reload();
           widget.popup.dismiss();
         },
@@ -180,11 +184,11 @@ class _SpaceSelectViewState extends State<_SpaceSelectView> {
     return GridView.builder(
       shrinkWrap: true,
       //physics: const NeverScrollableScrollPhysics(),
-      itemCount: _spaceRangeUnits.length,
+      itemCount: _rangeUnits.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4, childAspectRatio: 2,),
       itemBuilder: (context, itemIndex) {
-        return _itemSpaceUnit(_spaceRangeUnits[itemIndex]);
+        return _itemSpaceUnit(_rangeUnits[itemIndex]);
       },
     );
   }

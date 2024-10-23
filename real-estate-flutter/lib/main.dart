@@ -21,6 +21,7 @@ void main() async {
     await windowManager.ensureInitialized();
     WindowManager.instance.setMinimumSize(const Size(640, 480));
     WindowManager.instance.setSize(const Size(640, 480));
+    WindowManager.instance.setTitle("네이버 부동산 수집기");
   }
   getItRegister();
   runApp(const ScreenView());

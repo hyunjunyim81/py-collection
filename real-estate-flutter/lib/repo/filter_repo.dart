@@ -4,20 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:real_estate/api/data/article_response.dart';
 import 'package:real_estate/api/table/role_type.dart';
 import 'package:real_estate/api/table/trade_type.dart';
+import 'package:real_estate/common/util/num_util.dart';
 import 'package:real_estate/search/model/sales_type_dt.dart';
 import 'package:real_estate/search/model/sales_type_office.dart';
 import 'package:real_estate/search/model/thing.dart';
 
 class FilterRepo
 {
-   static const double minRangeValue = 0;
-   static const double maxRangeValue = 1001;
-   static const RangeValues defaultRangeValues = RangeValues(minRangeValue, maxRangeValue);
+   static const double minSpaceValue = 0;
+   static const double maxSpaceValue = 1001;
+   static const RangeValues defaultSpaceValues = RangeValues(minSpaceValue, maxSpaceValue);
+
+   static const double minSalePriceValue = 0;
+   static const double maxSalePriceValue = 1000001;
+   static const RangeValues defaultSalePriceValues = RangeValues(minSalePriceValue, maxSalePriceValue);
+
+   static const double minRentPriceValue = 0;
+   static const double maxRentPriceValue = 100001;
+   static const RangeValues defaultRentPriceValues = RangeValues(minRentPriceValue, maxRentPriceValue);
 
    RoleType filterRoleType = RoleType.SG;
    TradeType filterTradeType = TradeType.A1;
 
-   RangeValues filterRangeValues = defaultRangeValues;
+   RangeValues filterSpaceValues = defaultSpaceValues;
 
    SalesTypeDT downtown = SalesTypeDT();
    SalesTypeOffice office = SalesTypeOffice();
@@ -79,13 +88,27 @@ class FilterRepo
    String spaceRangeString(RangeValues rangeValues) {
       var start = '';
       var end = '';
-      if (rangeValues.start != minRangeValue) {
+      if (rangeValues.start != minSpaceValue) {
          start = rangeValues.start.toInt().toString();
       }
 
-      if (rangeValues.end != maxRangeValue) {
+      if (rangeValues.end != maxSpaceValue) {
          end = rangeValues.end.toInt().toString();
       }
       return start.isEmpty && end.isEmpty ? '전체' : '$start~$end평';
+   }
+
+   String priceRangeString(RangeValues rangeValues) {
+      var start = '';
+      var end = '';
+      if (rangeValues.start != minSpaceValue) {
+         start = rangeValues.start.toStringAsDynamic(1);
+      }
+
+      if (rangeValues.end != maxSpaceValue) {
+         end = rangeValues.end.toStringAsDynamic(1);
+      }
+      return start.isEmpty && end.isEmpty ? '전체'
+          : '${start}~${end}억';
    }
 }
