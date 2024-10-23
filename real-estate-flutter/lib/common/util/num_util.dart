@@ -12,4 +12,18 @@ extension DoubleEx on double {
     }
     return decimal.isNotEmpty ? '$integer.$decimal' : integer.toString();
   }
+
+  String toStringAsCash() {
+    var integer = (this / 10000).toInt();
+    var decimal = (this % 10000).toInt();
+    if (integer == 0) {
+      return'$decimal만';
+    }
+    else if (decimal == 0) {
+      return '$integer억';
+    }
+    else {
+      return '$integer억 $decimal만';
+    }
+  }
 }

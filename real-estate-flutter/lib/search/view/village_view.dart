@@ -11,6 +11,8 @@ import 'package:real_estate/repo/filter_repo.dart';
 import 'package:real_estate/search/view/village_select_popup.dart';
 import 'package:real_estate/setting/view/setting_popup.dart';
 
+import 'rent_price_popup.dart';
+import 'sale_price_popup.dart';
 import 'space_range_popup.dart';
 
 class VillageView extends StatefulWidget {
@@ -422,9 +424,9 @@ class _VillageViewState extends State<VillageView> {
               )
           ),
         ),
-        onPressed: _showSpacePopup,
+        onPressed: _showSalePopup,
         child: Text(
-            '매매/보증금 ${filterRepo.spaceRangeString(filterRepo.filterSpaceValues)}',
+            '매매/보증금 ${filterRepo.salePriceRangeString(filterRepo.filterSalePriceValues)}',
             style: const TextStyle(fontSize: 14, color: Colors.black)
         ),
       ),
@@ -432,7 +434,7 @@ class _VillageViewState extends State<VillageView> {
   }
 
   void _showSalePopup() {
-    //SpaceRangePopup().show(context, _update);
+    SalePricePopup().show(context, _update);
   }
 
   Widget _rent() {
@@ -451,9 +453,9 @@ class _VillageViewState extends State<VillageView> {
               )
           ),
         ),
-        onPressed: _showSpacePopup,
+        onPressed: _showRentPopup,
         child: Text(
-            '월세 ${filterRepo.spaceRangeString(filterRepo.filterSpaceValues)}',
+            '월세 ${filterRepo.rentPriceRangeString(filterRepo.filterRentPriceValues)}',
             style: const TextStyle(fontSize: 14, color: Colors.black)
         ),
       ),
@@ -461,6 +463,6 @@ class _VillageViewState extends State<VillageView> {
   }
 
   void _showRentPopup() {
-    //SpaceRangePopup().show(context, _update);
+    RentPricePopup().show(context, _update);
   }
 }

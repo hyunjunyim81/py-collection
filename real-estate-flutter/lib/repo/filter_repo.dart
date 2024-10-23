@@ -20,13 +20,15 @@ class FilterRepo
    static const RangeValues defaultSalePriceValues = RangeValues(minSalePriceValue, maxSalePriceValue);
 
    static const double minRentPriceValue = 0;
-   static const double maxRentPriceValue = 100001;
+   static const double maxRentPriceValue = 10001;
    static const RangeValues defaultRentPriceValues = RangeValues(minRentPriceValue, maxRentPriceValue);
 
    RoleType filterRoleType = RoleType.SG;
    TradeType filterTradeType = TradeType.A1;
 
    RangeValues filterSpaceValues = defaultSpaceValues;
+   RangeValues filterSalePriceValues = defaultSalePriceValues;
+   RangeValues filterRentPriceValues = defaultRentPriceValues;
 
    SalesTypeDT downtown = SalesTypeDT();
    SalesTypeOffice office = SalesTypeOffice();
@@ -98,17 +100,32 @@ class FilterRepo
       return start.isEmpty && end.isEmpty ? '전체' : '$start~$end평';
    }
 
-   String priceRangeString(RangeValues rangeValues) {
+   String salePriceRangeString(RangeValues rangeValues) {
       var start = '';
       var end = '';
-      if (rangeValues.start != minSpaceValue) {
-         start = rangeValues.start.toStringAsDynamic(1);
+      if (rangeValues.start != minSalePriceValue) {
+         start = (rangeValues.start / 10000).toStringAsDynamic(1);
       }
 
-      if (rangeValues.end != maxSpaceValue) {
-         end = rangeValues.end.toStringAsDynamic(1);
+      if (rangeValues.end != maxSalePriceValue) {
+         end = (rangeValues.end / 10000).toStringAsDynamic(1);
       }
       return start.isEmpty && end.isEmpty ? '전체'
           : '${start}~${end}억';
    }
+
+   String rentPriceRangeString(RangeValues rangeValues) {
+      var start = '';
+      var end = '';
+      if (rangeValues.start != minRentPriceValue) {
+         start = rangeValues.start.toInt().toString();
+      }
+
+      if (rangeValues.end != maxRentPriceValue) {
+         end = rangeValues.end.toInt().toString();
+      }
+      return start.isEmpty && end.isEmpty ? '전체'
+          : '${start}~${end}만';
+   }
+
 }

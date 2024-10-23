@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:real_estate/api/table/village.dart';
 import 'package:real_estate/common/di/extension_get_it.dart';
+import 'package:real_estate/common/util/num_util.dart';
 import 'package:real_estate/common/view/dialog_form.dart';
 import 'package:real_estate/repo/estate_repo.dart';
 import 'package:real_estate/repo/filter_repo.dart';
@@ -74,7 +75,7 @@ class _SalePriceViewState extends State<_SalePriceView> {
   @override
   void initState() {
     super.initState();
-    _currentRangeValues = filterRepo.filterSpaceValues;
+    _currentRangeValues = filterRepo.filterSalePriceValues;
   }
 
   @override
@@ -107,11 +108,11 @@ class _SalePriceViewState extends State<_SalePriceView> {
       child: RangeSlider(
         values: _currentRangeValues,
         min: 0,
-        max: 1001,
-        divisions: 1001,
+        max: 1000001,
+        divisions: 1000001,
         labels: RangeLabels(
             _currentRangeValues.start.toInt().toString(),
-            _currentRangeValues.end == 1001
+            _currentRangeValues.end == FilterRepo.maxSalePriceValue
             ? '전체' : _currentRangeValues.end.toInt().toString(),
         ),
         onChanged: (RangeValues values) {
@@ -141,7 +142,7 @@ class _SalePriceViewState extends State<_SalePriceView> {
           const SizedBox(width: 10,),
           Expanded(
             child: Container(alignment: Alignment.centerLeft,
-              child: Text('매매/보증금  ${filterRepo.spaceRangeString(_currentRangeValues)}',
+              child: Text('매매/보증금  ${filterRepo.salePriceRangeString(_currentRangeValues)}',
                   style: const TextStyle(fontSize: 24, color: Colors.black)),
             ),
           ),
@@ -170,7 +171,7 @@ class _SalePriceViewState extends State<_SalePriceView> {
           ),
         ),
         onPressed: () {
-          filterRepo.filterSpaceValues = _currentRangeValues;
+          filterRepo.filterSalePriceValues = _currentRangeValues;
           widget.reload();
           widget.popup.dismiss();
         },
@@ -186,7 +187,7 @@ class _SalePriceViewState extends State<_SalePriceView> {
       //physics: const NeverScrollableScrollPhysics(),
       itemCount: _rangeUnits.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4, childAspectRatio: 2,),
+        crossAxisCount: 4, childAspectRatio: 3,),
       itemBuilder: (context, itemIndex) {
         return _itemSpaceUnit(_rangeUnits[itemIndex]);
       },
@@ -204,9 +205,9 @@ class _SalePriceViewState extends State<_SalePriceView> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Text(
-            spaceUnits.last == 1001
-                ? '1000~평'
-                : '${spaceUnits.last.toInt().toString()}평',
+            spaceUnits.last == FilterRepo.maxSalePriceValue
+                ? '100억~'
+                : '${(spaceUnits.last / 10000).toStringAsDynamic(1)}억',
             style: const TextStyle(fontSize: 20, color: Colors.black87)
         )
 

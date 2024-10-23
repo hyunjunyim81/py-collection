@@ -3,11 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:real_estate/api/table/village.dart';
 import 'package:real_estate/common/di/extension_get_it.dart';
+import 'package:real_estate/common/util/num_util.dart';
 import 'package:real_estate/common/view/dialog_form.dart';
 import 'package:real_estate/repo/estate_repo.dart';
 import 'package:real_estate/repo/filter_repo.dart';
 
-class SpaceRangePopup {
+class RentPricePopup {
   bool _isDismiss = false;
   late DialogRoute route;
 
@@ -41,7 +42,7 @@ class SpaceRangePopup {
             content: SizedBox(
               width: 600,
               height: 400,
-              child: _SpaceRangeView(reload: reload, popup: this),
+              child: _RentPriceView(reload: reload, popup: this),
             )
         );
       },
@@ -49,28 +50,32 @@ class SpaceRangePopup {
   }
 }
 
-class _SpaceRangeView extends StatefulWidget {
-  final SpaceRangePopup popup;
+class _RentPriceView extends StatefulWidget {
+  final RentPricePopup popup;
   final Function reload;
 
-  _SpaceRangeView({super.key, required this.popup, required this.reload});
+  _RentPriceView({super.key, required this.popup, required this.reload});
 
   @override
-  State<StatefulWidget> createState() => _SpaceRangeViewState();
+  State<StatefulWidget> createState() => _RentPriceViewState();
 }
 
-class _SpaceRangeViewState extends State<_SpaceRangeView> {
+class _RentPriceViewState extends State<_RentPriceView> {
   late final EstateRepo estateRepo = di.inject();
   late final FilterRepo filterRepo = di.inject();
-  late RangeValues _currentSpaceValues;
-  final List<List<double>> _spaceRangeUnits = [[0, 50], [50, 100], [100, 200],
-    [200, 300], [300, 400], [400, 500], [500, 600], [600, 700],
-    [700, 800], [800, 900], [900, 1000], [1000, 1001]];
+  late RangeValues _currentRangeValues;
+  final List<List<double>> _rangeUnits = [[0, 50], [50, 100],
+    [100, 200], [200, 300], [300, 400],
+    [400, 500], [500, 600], [600, 700],
+    [700, 800], [800,900], [900, 1000],
+    [1000, 1500], [1500, 2000], [2000, 4000],
+    [4000, 6000], [6000, 8000], [8000, 10000],
+    [10000, 10001]];
 
   @override
   void initState() {
     super.initState();
-    _currentSpaceValues = filterRepo.filterSpaceValues;
+    _currentRangeValues = filterRepo.filterRentPriceValues;
   }
 
   @override
@@ -101,24 +106,24 @@ class _SpaceRangeViewState extends State<_SpaceRangeView> {
       width: double.maxFinite,
       height: 50,
       child: RangeSlider(
-        values: _currentSpaceValues,
+        values: _currentRangeValues,
         min: 0,
-        max: 1001,
-        divisions: 1001,
+        max: _rangeUnits.last.last,
+        divisions: _rangeUnits.last.last.toInt(),
         labels: RangeLabels(
-            _currentSpaceValues.start.toInt().toString(),
-            _currentSpaceValues.end == 1001
-            ? '전체' : _currentSpaceValues.end.toInt().toString(),
+            _currentRangeValues.start.toInt().toString(),
+            _currentRangeValues.end == FilterRepo.maxRentPriceValue
+            ? '전체' : _currentRangeValues.end.toInt().toString(),
         ),
         onChanged: (RangeValues values) {
           setState(() {
             if (values.end > values.start) {
-              _currentSpaceValues = values;
+              _currentRangeValues = values;
             } else {
               if (values.start == FilterRepo.minSpaceValue) {
-                _currentSpaceValues = const RangeValues(0, 1);
+                _currentRangeValues = const RangeValues(0, 1);
               } else {
-                _currentSpaceValues = RangeValues(values.end - 1, values.end);
+                _currentRangeValues = RangeValues(values.end - 1, values.end);
               }
             }
           });
@@ -137,7 +142,7 @@ class _SpaceRangeViewState extends State<_SpaceRangeView> {
           const SizedBox(width: 10,),
           Expanded(
             child: Container(alignment: Alignment.centerLeft,
-              child: Text('면적  ${filterRepo.spaceRangeString(_currentSpaceValues)}',
+              child: Text('월세  ${filterRepo.rentPriceRangeString(_currentRangeValues)}',
                   style: const TextStyle(fontSize: 24, color: Colors.black)),
             ),
           ),
@@ -166,7 +171,7 @@ class _SpaceRangeViewState extends State<_SpaceRangeView> {
           ),
         ),
         onPressed: () {
-          filterRepo.filterSpaceValues = _currentSpaceValues;
+          filterRepo.filterRentPriceValues = _currentRangeValues;
           widget.reload();
           widget.popup.dismiss();
         },
@@ -180,11 +185,11 @@ class _SpaceRangeViewState extends State<_SpaceRangeView> {
     return GridView.builder(
       shrinkWrap: true,
       //physics: const NeverScrollableScrollPhysics(),
-      itemCount: _spaceRangeUnits.length,
+      itemCount: _rangeUnits.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4, childAspectRatio: 2,),
+        crossAxisCount: 4, childAspectRatio: 3,),
       itemBuilder: (context, itemIndex) {
-        return _itemSpaceUnit(_spaceRangeUnits[itemIndex]);
+        return _itemSpaceUnit(_rangeUnits[itemIndex]);
       },
     );
   }
@@ -200,9 +205,9 @@ class _SpaceRangeViewState extends State<_SpaceRangeView> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Text(
-            spaceUnits.last == FilterRepo.maxSpaceValue
-                ? '1000평~'
-                : '${spaceUnits.last.toInt().toString()}평',
+            spaceUnits.last == FilterRepo.maxRentPriceValue
+                ? '1억~'
+                : '${spaceUnits.last.toStringAsCash()}',
             style: const TextStyle(fontSize: 20, color: Colors.black87)
         )
 
@@ -210,10 +215,10 @@ class _SpaceRangeViewState extends State<_SpaceRangeView> {
   }
 
   bool _includeRange(List<double> spaceRange) {
-    if (_currentSpaceValues.start <= spaceRange.first && spaceRange.first <= _currentSpaceValues.end){
+    if (_currentRangeValues.start <= spaceRange.first && spaceRange.first <= _currentRangeValues.end){
       return true;
     }
-    if (_currentSpaceValues.start <= spaceRange.last && spaceRange.last <= _currentSpaceValues.end){
+    if (_currentRangeValues.start <= spaceRange.last && spaceRange.last <= _currentRangeValues.end){
       return true;
     }
     return false;
