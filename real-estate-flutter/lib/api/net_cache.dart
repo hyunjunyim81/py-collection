@@ -11,10 +11,59 @@ enum CacheType {
   const CacheType(this.folderName);
 }
 
+enum CacheState {
+  empty,
+  invalid,
+  valid,
+}
+
+class CacheFiles {
+  final String dumpPath;
+  final String metaPath;
+  final CacheType cacheType;
+  final String fileName;
+  final int page;
+  final int totalPageCnt;
+  CacheFiles({required this.dumpPath, required this.metaPath,
+    required this.cacheType, required this.fileName,
+    required this.page, required this.totalPageCnt});
+}
+
 class NetCache {
   static const int _zero = 0;
   static const int _invalidPage = 0;
   static const int _3hourToMilliseconds = 1000 * 60 * 60 * 3;
+
+  static Future<CacheState> checkFile(CacheType cacheType, String fileName,
+      {int page = _invalidPage, int totalPageCnt = _zero}) async {
+    var dumpPath = await _generateDumpPath(cacheType, fileName, page);
+    var metaPath = await _generateMetaPath(cacheType, fileName);
+
+    var metaFile = File(metaPath);
+    if (false == await metaFile.exists()) {
+      print('NetCache checkFile metaFile is not exist : ${metaPath}');
+      return CacheState.empty;
+    }
+
+    var timeCheck = page < 2;
+    var files = await _getAllDump(File(dumpPath));
+    if (page == 1 && files.length != totalPageCnt) {
+      print('NetCache checkFile ${files.length} != ${totalPageCnt}');
+      return CacheState.invalid;
+    }
+
+    if (timeCheck) {
+      var saveTs = int.parse(await metaFile.readAsString());
+      var currentTs = DateTime.now().millisecondsSinceEpoch;
+      //after 3 hour
+      if (currentTs - saveTs > _3hourToMilliseconds) {
+        print('NetCache checkFile metaFile saved after 3 hour');
+        return CacheState.invalid;
+      }
+    }
+
+    return CacheState.valid;
+  }
 
   static Future<String> read(CacheType cacheType, String fileName,
       {int page = _invalidPage, int totalPageCnt = _zero}) async {
@@ -47,6 +96,8 @@ class NetCache {
     });
   }
 
+
+  //
   static Future<String> _check(CacheType cacheType, String fileName,
       int page, int totalPageCnt) async {
     var dumpPath = await _generateDumpPath(cacheType, fileName, page);
@@ -104,6 +155,7 @@ class NetCache {
     print('NetCache _flush ${dumpFile.absolute.path}');
   }
 
+  //private
   static Future<bool> _createDir(CacheType cacheType, String subName) async {
     final Directory cacheDir = await getApplicationCacheDirectory();
     var path = subName.isEmpty

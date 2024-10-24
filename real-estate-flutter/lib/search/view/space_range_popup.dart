@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:real_estate/api/table/village.dart';
 import 'package:real_estate/common/di/extension_get_it.dart';
 import 'package:real_estate/common/view/dialog_form.dart';
 import 'package:real_estate/repo/estate_repo.dart';
@@ -193,7 +190,7 @@ class _SpaceRangeViewState extends State<_SpaceRangeView> {
     return Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: _includeRange(spaceUnits) ? Colors.greenAccent : Colors.white, //background color
+          color: _includeRange(spaceUnits) ? Colors.green[300] : Colors.white, //background color
           border: Border.all(
               color: Colors.grey // border color
           ),

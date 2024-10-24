@@ -22,7 +22,8 @@ class NetAPI {
   static Future<Filter> searchResult(SearchOption option) async {
     //https://m.land.naver.com/search/result/강남구 대치동
     String body = await NetCache.read(CacheType.search, '${option.gu} ${option.dong}');
-    if (body.isEmpty) {
+    var usedCache = body.isNotEmpty;
+    if (!usedCache) {
       var uri = Uri.https('m.land.naver.com', '/search/result/${option.gu} ${option.dong}');
       http.Response response = await http.get(uri, headers: await NetHeader.randomHeader());
       body = response.body;
@@ -39,15 +40,18 @@ class NetAPI {
       if (script.outerHtml.contains('filter:')) {
         var filter = Filter(script.outerHtml)..config(option);
         await ExcelReader.matched(filter);
+        await Future.delayed(NetHeader.randomDuration(usedCache));
         return filter;
       }
     }
+    await Future.delayed(NetHeader.randomDuration(usedCache));
     throw Exception("not found filter");
   }
 
   static Future<Cluster> cluster(Filter filter) async {
     String body = await NetCache.read(CacheType.cluster, filter.cortarNo);
-    if (body.isEmpty) {
+    var usedCache = body.isNotEmpty;
+    if (!usedCache) {
       var uri = Uri.parse('https://m.land.naver.com/cluster/clusterList?view=atcl'
           '&cortarNo=${filter.cortarNo}&rletTpCd=${filter.rletTpCds}'
           '&tradTpCd=${filter.tradTpCds}&z=${filter.z.toInt()}&lat=${filter.lat}'
@@ -66,57 +70,64 @@ class NetAPI {
     //print('clusterList statusCode : ${response.statusCode}');
     //print('clusterList body : ${response.body}');
     Map<String, dynamic> jsonData = jsonDecode(body);
-    return Cluster.fromJson(jsonData)
+    var cluster = Cluster.fromJson(jsonData)
       ..data?.article?.forEach((item) {
         item.generateUrl(filter);
       });
+    await Future.delayed(NetHeader.randomDuration(usedCache));
+    return cluster;
   }
 
-  static Future<int> article(Data data, OnArticle onArticle, OnStatus onStatus) async {
+  static Future<int> articlePage(ARTICLE article, String url, int page, OnArticle onArticle) async {
+    var usedCache = false;
+    int cnt = 0;
+    try {
+      String body = await NetCache.read(CacheType.article,
+          article.lgeo ?? "empty",
+          page: page, totalPageCnt: article.urls.length);
+      usedCache = body.isNotEmpty;
+      if (!usedCache) {
+        var uri = Uri.parse(url);
+        http.Response response = await http.get(uri, headers: await NetHeader.randomHeader());
+        body = response.body;
+        await NetCache.write(body, CacheType.article,
+            article.lgeo ?? "empty",
+            page: page, totalPageCnt: article.urls.length);
+        print('article url : $url');
+      }
+      else {
+        print('read article cache (${article.lgeo ?? "empty"} / ${page})');
+      }
+
+      Map<String, dynamic> jsonData = jsonDecode(body);
+      var articleResponse = ArticleResponse.fromJson(jsonData);
+      if (articleResponse.body?.isNotEmpty ?? false) {
+        onArticle(articleResponse.body!);
+        cnt = articleResponse.body!.length;
+      }
+      print('article body count : ${articleResponse.body?.length}');
+    }
+    catch(e) {
+      print('article error url : $url');
+      print('article error : $e');
+    }
+    await Future.delayed(NetHeader.randomDuration(usedCache));
+    return cnt;
+  }
+
+  static Future<int> articleAll(Data data, OnArticle onArticle, OnStatus onStatus) async {
     int totalCnt = 0;
     int totalStep = data.totalStep();
     int step = 0;
     for (var article in data.article ?? []) {
-      bool usedCache = false;
       for (int i = 0; i < article.urls.length; ++i) {
         var url = article.urls[i];
-        try {
-          String body = await NetCache.read(CacheType.article,
-              article.lgeo ?? "empty",
-              page: i + 1, totalPageCnt: article.urls.length);
-          usedCache = body.isNotEmpty;
-          if (!usedCache) {
-            var uri = Uri.parse(url);
-            http.Response response = await http.get(uri, headers: await NetHeader.randomHeader());
-            body = response.body;
-            await NetCache.write(body, CacheType.article,
-                article.lgeo ?? "empty",
-                page: i + 1, totalPageCnt: article.urls.length);
-            print('article url : $url');
-          }
-          else {
-            print('read article cache (${article.lgeo ?? "empty"} / ${i + 1})');
-          }
-
-          Map<String, dynamic> jsonData = jsonDecode(body);
-          var articleResponse = ArticleResponse.fromJson(jsonData);
-          if (articleResponse.body?.isNotEmpty ?? false) {
-            onArticle(articleResponse.body!);
-            totalCnt += articleResponse.body!.length;
-          }
-          print('article body count : ${articleResponse.body?.length}');
-        }
-        catch(e) {
-          print('article error url : $url');
-          print('article error : $e');
-        }
-        await Future.delayed(NetHeader.randomDuration(usedCache));
+        totalCnt += await articlePage(article, url, i + 1, onArticle);
         onStatus(++step, totalStep);
       }
     }
-
     onStatus(totalStep, totalStep);
-    print('article bodyList : $totalCnt');
+    print('article totalCnt : $totalCnt');
     return totalCnt;
   }
 

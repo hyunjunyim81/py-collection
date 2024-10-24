@@ -101,7 +101,7 @@ class ARTICLE {
 
   void generateUrl(Filter filter) {
     len_pages = ((count ?? 0) / 20).ceil();
-    print('generateUrl ${filter.cortarNo}/$lgeo count : $count, page : $len_pages');
+    //print('generateUrl ${filter.cortarNo}/$lgeo count : $count, page : $len_pages');
     urls.clear();
     for (var idx = 1; idx <= len_pages; ++idx) {
       urls.add('https://m.land.naver.com/cluster/ajax/articleList?itemId=${lgeo}'

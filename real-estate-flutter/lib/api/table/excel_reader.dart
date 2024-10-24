@@ -1,7 +1,6 @@
 import 'package:excel/excel.dart';
 import 'package:flutter/services.dart';
 import 'package:real_estate/api/data/filter.dart';
-import 'package:real_estate/api/table/search_option.dart';
 import 'package:real_estate/api/table/village.dart';
 
 class ExcelReader {

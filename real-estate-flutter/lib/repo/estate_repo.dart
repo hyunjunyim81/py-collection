@@ -46,20 +46,20 @@ class EstateRepo {
   }
 
   void requestEstate(FilterRepo filterModel) async {
-    filter = await NetAPI.searchResult(getOption());
-    print('requestEstate() filter : ${filter!.lat} / ${filter!.lon}');
-    cluster = await NetAPI.cluster(filter!);
-    print('requestEstate() cluster : ${cluster!.data!.totalCount()}');
-    filterModel.reset();
-    int cnt = await NetAPI.article(cluster!.data!,
-        (bodies)  {
-          filterModel.config(bodies);
-        },
-        (step, totalStep) {
-          _notifyOnStatus(step, totalStep);
-          print('requestEstate() step : $step / $totalStep');
-        });
-
-    print('requestEstate() article : ${cnt}');
+    // filter = await NetAPI.searchResult(getOption());
+    // print('requestEstate() filter : ${filter!.lat} / ${filter!.lon}');
+    // cluster = await NetAPI.cluster(filter!);
+    // print('requestEstate() cluster : ${cluster!.data!.totalCount()}');
+    // filterModel.reset();
+    // int cnt = await NetAPI.article(cluster!.data!,
+    //     (bodies)  {
+    //       filterModel.config(bodies);
+    //     },
+    //     (step, totalStep) {
+    //       _notifyOnStatus(step, totalStep);
+    //       print('requestEstate() step : $step / $totalStep');
+    //     });
+    //
+    // print('requestEstate() article : ${cnt}');
   }
 }

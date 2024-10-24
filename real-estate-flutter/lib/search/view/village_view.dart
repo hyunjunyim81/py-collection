@@ -9,6 +9,7 @@ import 'package:real_estate/common/view/dialog_form.dart';
 import 'package:real_estate/repo/estate_repo.dart';
 import 'package:real_estate/repo/filter_repo.dart';
 import 'package:real_estate/search/view/village_select_popup.dart';
+import 'package:real_estate/service/collection_service.dart';
 import 'package:real_estate/setting/view/setting_popup.dart';
 
 import 'rent_price_popup.dart';
@@ -26,6 +27,7 @@ class VillageView extends StatefulWidget {
 class _VillageViewState extends State<VillageView> {
   late final EstateRepo estateRepo = di.inject();
   late final FilterRepo filterRepo = di.inject();
+  late final CollectionService service = di.inject();
 
   @override
   void initState() {
@@ -33,6 +35,13 @@ class _VillageViewState extends State<VillageView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _config();
     });
+    service.start();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    service.end();
   }
 
   @override
